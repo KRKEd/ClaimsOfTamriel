@@ -1,0 +1,916 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Claims of Tamriel — KR&KE</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Uncial+Antiqua&family=Cinzel:wght@400;600;700&family=IM+Fell+English:ital@0;1&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#090805;--bg2:#100c06;--bg3:#181208;--bg4:#221a0c;
+  --gold:#c8a010;--gb:#f0d020;--gd:rgba(200,160,16,.13);--gbd:rgba(200,160,16,.30);
+  --ice:#5888c4;--blood:#c04444;
+  --text:#f0e8d0;--dim:#b8a880;--mut:#f0d020;--faint:#1c1608;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--text);font-family:"IM Fell English",Georgia,serif;font-size:17px;line-height:1.75;overflow-x:hidden}
+
+/* NAV */
+nav{position:fixed;top:0;left:0;right:0;z-index:200;background:rgba(7,6,10,.97);backdrop-filter:blur(14px);border-bottom:1px solid var(--gbd);padding:0 2.5rem;height:52px;display:flex;align-items:center;justify-content:space-between}
+.nbrand{font-family:"Uncial Antiqua",serif;font-size:11px;font-weight:700;color:var(--gold);letter-spacing:.13em;text-decoration:none;text-shadow:0 0 24px rgba(200,160,16,.35)}
+.nlinks{display:flex;gap:2.2rem;list-style:none}
+.nlinks a{font-family:"Cinzel",serif;font-size:9.5px;color:var(--mut);text-decoration:none;letter-spacing:.14em;transition:color .2s}
+.nlinks a:hover{color:var(--gold)}
+
+/* HERO */
+#hero{position:relative;min-height:100vh;overflow:hidden;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:7rem 1.5rem 5rem}
+#starfield{position:absolute;inset:0;z-index:0}
+.fog{position:absolute;inset:0;z-index:1;pointer-events:none;overflow:hidden}
+.fo{position:absolute;border-radius:50%;filter:blur(90px);pointer-events:none;animation:drift linear infinite}
+.fo.a{width:680px;height:320px;background:radial-gradient(rgba(160,100,20,.12),transparent);top:5%;left:-12%;animation-duration:22s}
+.fo.b{width:520px;height:260px;background:radial-gradient(rgba(80,40,10,.1),transparent);top:55%;right:-8%;animation-duration:30s;animation-delay:-14s}
+.fo.c{width:600px;height:280px;background:radial-gradient(rgba(120,70,10,.1),transparent);bottom:0;left:25%;animation-duration:26s;animation-delay:-8s}
+@keyframes drift{0%,100%{transform:translate(0,0)}40%{transform:translate(40px,-20px)}70%{transform:translate(-18px,24px)}}
+.hi{position:relative;z-index:2;max-width:660px;margin:0 auto}
+/* angular hero frame */
+.hf{position:relative;padding:3rem 3rem 2.5rem}
+.hf-border{position:absolute;inset:0;pointer-events:none}
+.hf-border svg{width:100%;height:100%;position:absolute;inset:0}
+.kicker{font-family:"Cinzel",serif;font-size:10px;letter-spacing:.3em;color:var(--gold);margin-bottom:1.6rem;opacity:0;animation:fu .9s .2s forwards}
+.htitle{font-family:"Uncial Antiqua",serif;font-size:clamp(2.6rem,7vw,5.2rem);font-weight:400;line-height:1.05;margin-bottom:.75rem;color:var(--text);opacity:0;animation:fu .9s .4s forwards;text-shadow:0 0 50px rgba(200,160,16,.2)}
+.htitle em{font-style:normal;color:var(--gold);text-shadow:0 0 40px rgba(200,160,16,.45)}
+.hsub{font-size:1.05rem;color:var(--text);margin-bottom:2.5rem;opacity:0;animation:fu .9s .6s forwards}
+.hero-cta{display:inline-block;font-family:"Cinzel",serif;font-size:11.5px;letter-spacing:.24em;padding:11px 38px;color:var(--gb);border:1px solid var(--gbd);text-decoration:none;transition:background .2s,box-shadow .2s;margin-bottom:3rem;opacity:0;animation:fu .9s .8s forwards;clip-path:polygon(8px 0,calc(100% - 8px) 0,100% 8px,100% calc(100% - 8px),calc(100% - 8px) 100%,8px 100%,0 calc(100% - 8px),0 8px)}
+.hero-cta:hover{background:var(--gd);box-shadow:0 0 24px rgba(200,160,16,.15)}
+.hstats{display:flex;gap:2rem;align-items:center;justify-content:center;opacity:0;animation:fu .9s .95s forwards}
+.hs{text-align:center}
+.hs b{font-family:"Cinzel Decorative",serif;font-size:1.7rem;font-weight:700;color:var(--gold);display:block;line-height:1;text-shadow:0 0 20px rgba(200,160,16,.3)}
+.hs small{font-family:"Cinzel",serif;font-size:.6rem;letter-spacing:.15em;color:var(--mut);text-transform:uppercase;display:block;margin-top:.25rem}
+.hd{width:1px;height:34px;background:var(--gbd)}
+
+/* SECTIONS */
+section{padding:5.5rem 2rem;max-width:1040px;margin:0 auto}
+.sfull{max-width:100%;padding:5.5rem 0;border-top:1px solid var(--gbd);border-bottom:1px solid var(--gbd)}
+.sfull.d2{background:var(--bg2)}
+.sin{max-width:1040px;margin:0 auto;padding:0 2rem}
+.chapter{font-family:"Cinzel",serif;font-size:.72rem;letter-spacing:.3em;color:var(--gold);text-transform:uppercase;margin-bottom:.4rem;opacity:.7}
+h2{font-family:"Cinzel",serif;font-size:clamp(1.55rem,3.5vw,2.3rem);font-weight:600;color:var(--text);margin-bottom:1.2rem;line-height:1.18}
+h2 em{font-style:italic;color:var(--gold)}
+h3{font-family:"Cinzel",serif;font-size:1rem;font-weight:600;color:var(--gold);margin-bottom:.5rem;letter-spacing:.07em}
+p{margin-bottom:1rem;color:var(--dim)}
+p:last-child{margin-bottom:0}
+strong{color:var(--text);font-weight:600}
+.rule{height:1px;background:linear-gradient(90deg,transparent,rgba(200,160,16,.35),transparent);margin:1.25rem 0}
+blockquote{border-left:2px solid var(--gbd);padding:.7rem 1.5rem;margin:1.5rem 0;background:linear-gradient(90deg,rgba(200,160,16,.04),transparent 70%)}
+blockquote p{color:var(--text);font-size:.95rem}
+blockquote cite{font-family:"Cinzel",serif;font-size:.7rem;letter-spacing:.07em;color:var(--mut);display:block;margin-top:.4rem}
+
+/* OCTAGONAL CARD */
+.oct{position:relative;background:var(--bg3);clip-path:polygon(10px 0,calc(100% - 10px) 0,100% 10px,100% calc(100% - 10px),calc(100% - 10px) 100%,10px 100%,0 calc(100% - 10px),0 10px);padding:1.5rem;transition:transform .2s}
+.oct::before{content:"";position:absolute;inset:0;pointer-events:none;background:linear-gradient(135deg,var(--gold) 10px,transparent 10px) top left/12px 12px no-repeat,linear-gradient(225deg,var(--gold) 10px,transparent 10px) top right/12px 12px no-repeat,linear-gradient(315deg,var(--gold) 10px,transparent 10px) bottom right/12px 12px no-repeat,linear-gradient(45deg,var(--gold) 10px,transparent 10px) bottom left/12px 12px no-repeat;opacity:.25}
+.oct:hover{transform:translateY(-2px)}
+
+/* BADGES */
+.badge{display:inline-block;font-family:"Cinzel",serif;font-size:9.5px;letter-spacing:.06em;padding:2px 9px;font-weight:600;margin:2px;clip-path:polygon(4px 0,calc(100% - 4px) 0,100% 4px,100% calc(100% - 4px),calc(100% - 4px) 100%,4px 100%,0 calc(100% - 4px),0 4px)}
+.b-r{background:rgba(192,80,64,.2);color:#e88070;outline:1px solid rgba(192,80,64,.4)}
+.b-a{background:rgba(200,160,16,.2);color:#f0c060;outline:1px solid rgba(200,160,16,.4)}
+.b-b{background:rgba(72,136,184,.2);color:#78b8e8;outline:1px solid rgba(72,136,184,.4)}
+.b-t{background:rgba(40,136,112,.2);color:#60c0a0;outline:1px solid rgba(40,136,112,.4)}
+.b-p{background:rgba(120,88,200,.2);color:#b090e0;outline:1px solid rgba(120,88,200,.4)}
+
+/* GRID */
+.two{display:grid;grid-template-columns:1fr 1fr;gap:3rem;align-items:start}
+.cgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:1.25rem;margin-top:2rem}
+.stgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:.75rem;margin-top:2rem}
+.stcard{background:var(--bg3);clip-path:polygon(6px 0,calc(100% - 6px) 0,100% 6px,100% calc(100% - 6px),calc(100% - 6px) 100%,6px 100%,0 calc(100% - 6px),0 6px);padding:1rem;text-align:center}
+.stn{font-family:"Cinzel",serif;font-size:1.8rem;font-weight:700;color:var(--gold);display:block;text-shadow:0 0 16px rgba(200,160,16,.3)}
+.stl{font-family:"Cinzel",serif;font-size:.6rem;letter-spacing:.14em;color:var(--mut);text-transform:uppercase;display:block;margin-top:.2rem}
+
+/* NUMBERED LIST */
+.nlist{list-style:none;margin-top:1.25rem}
+.nlist li{display:flex;gap:1.25rem;margin-bottom:1.5rem;align-items:flex-start}
+.nnum{font-family:"Cinzel",serif;font-size:1.8rem;font-weight:700;color:var(--gold);opacity:.28;min-width:2.5rem;line-height:1.1}
+.nbdy h4{font-family:"Cinzel",serif;font-size:.95rem;font-weight:600;color:var(--text);margin-bottom:.3rem;letter-spacing:.05em}
+.nbdy p{font-size:.93rem;margin:0}
+
+/* ═══ WAR TABLE / CLAIM PAIRS ══════════════════════════════ */
+.war-intro{font-family:"Cinzel",serif;font-size:9.5px;letter-spacing:.12em;color:var(--mut);margin-bottom:1.25rem;display:flex;justify-content:space-between}
+.claim-grid{display:flex;flex-direction:column;gap:10px}
+.pc{background:var(--bg3);clip-path:polygon(8px 0,calc(100% - 8px) 0,100% 8px,100% calc(100% - 8px),calc(100% - 8px) 100%,8px 100%,0 calc(100% - 8px),0 8px);overflow:hidden}
+/* header bar */
+.ph{display:flex;align-items:center;gap:.75rem;padding:6px 14px;background:rgba(255,255,255,.025);border-bottom:1px solid rgba(255,255,255,.04)}
+.ph-i{font-family:"Cinzel Decorative",serif;font-size:.75rem;font-weight:700;color:var(--gold);opacity:.45;min-width:1.6rem}
+.ph-t{font-family:"Cinzel",serif;font-size:.65rem;letter-spacing:.16em;color:var(--mut)}
+.ph-rel{margin-left:auto;font-family:"Cinzel",serif;font-size:.65rem;letter-spacing:.1em;padding:2px 8px;clip-path:polygon(4px 0,calc(100% - 4px) 0,100% 4px,100% calc(100% - 4px),calc(100% - 4px) 100%,4px 100%,0 calc(100% - 4px),0 4px)}
+.rc{background:rgba(192,80,64,.18);color:#e88070;outline:1px solid rgba(192,80,64,.3)}
+.rs{background:rgba(200,160,16,.18);color:#f0c060;outline:1px solid rgba(200,160,16,.3)}
+/* body */
+.pb{display:flex;align-items:stretch;min-height:80px}
+.cs{flex:1;min-width:0;padding:.85rem 1rem;cursor:pointer;transition:background .12s;border-left:3px solid transparent}
+.cs:hover,.cs.on{background:rgba(200,160,16,.04)}
+.cs-f{font-family:"Cinzel",serif;font-size:.62rem;letter-spacing:.15em;text-transform:uppercase;opacity:.55;margin-bottom:.3rem}
+.cs-t{font-family:"Cinzel",serif;font-size:13px;color:var(--text);line-height:1.35;margin-bottom:.3rem;font-weight:400;letter-spacing:.02em}
+.cs-c{font-family:"Cinzel",serif;font-size:.62rem;letter-spacing:.08em;color:var(--mut)}
+/* VS diamond */
+.vsc{width:52px;flex-shrink:0;display:flex;align-items:center;justify-content:center;background:var(--bg2);border-left:1px solid rgba(255,255,255,.04);border-right:1px solid rgba(255,255,255,.04)}
+.vsdm{width:34px;height:34px;background:var(--bg4);border:1px solid var(--gbd);transform:rotate(45deg);display:flex;align-items:center;justify-content:center}
+.vsdm span{font-family:"Cinzel",serif;font-size:7px;font-weight:700;color:var(--gold);transform:rotate(-45deg);letter-spacing:.04em}
+/* detail */
+.pd{background:rgba(200,160,16,.025);border-top:1px solid rgba(255,255,255,.035);padding:.8rem 1rem;display:none}
+.pd.on{display:block}
+.pd-r{display:flex;gap:.75rem;font-size:13px;margin-bottom:2px;line-height:1.5}
+.pd-k{font-family:"Cinzel",serif;font-size:8.5px;letter-spacing:.12em;color:var(--mut);min-width:60px;flex-shrink:0;padding-top:2px}
+.pd-v{color:var(--text)}
+.pd-id{font-family:"JetBrains Mono",monospace;font-size:11px;color:var(--gold)}
+.pd-d{font-size:13.5px;color:var(--text);margin-top:.6rem;padding-top:.6rem;border-top:1px solid rgba(255,255,255,.04);line-height:1.65}
+
+/* ═══ CODEX / SPARQL ════════════════════════════════════════ */
+.codex{background:var(--bg3);clip-path:polygon(12px 0,calc(100% - 12px) 0,100% 12px,100% calc(100% - 12px),calc(100% - 12px) 100%,12px 100%,0 calc(100% - 12px),0 12px);overflow:hidden}
+.ctx{display:flex;overflow-x:auto;border-bottom:1px solid rgba(255,255,255,.05)}
+.ct{font-family:"Cinzel",serif;font-size:9.5px;letter-spacing:.1em;padding:10px 16px;cursor:pointer;color:var(--mut);border-bottom:2px solid transparent;white-space:nowrap;transition:color .15s;user-select:none}
+.ct:hover{color:var(--dim)}
+.ct.on{color:var(--gb);border-bottom-color:var(--gold)}
+.cp{display:none;padding:1.25rem}
+.cp.on{display:block}
+pre.sq{background:#040305;clip-path:polygon(6px 0,calc(100% - 6px) 0,100% 6px,100% calc(100% - 6px),calc(100% - 6px) 100%,6px 100%,0 calc(100% - 6px),0 6px);border:1px solid rgba(255,255,255,.04);padding:1.2rem;overflow-x:auto;font-family:"JetBrains Mono",monospace;font-size:12.5px;line-height:1.8;color:#bab090;margin-top:.75rem}
+.sk{color:#d4a030;font-weight:500}.sv{color:#70b4d0}.sp{color:#9870c0}.ss{color:#70a870}.sc{color:#3c3838;font-style:italic}
+.sqd{font-size:14.5px;color:var(--text);margin-top:.9rem;padding-top:.9rem;border-top:1px solid rgba(255,255,255,.04);line-height:1.7}
+.sqr{margin-top:.75rem;padding:.7rem 1rem;background:rgba(200,160,16,.04);border-left:2px solid var(--gbd);font-family:"JetBrains Mono",monospace;font-size:11.5px;color:var(--text);white-space:pre-wrap;line-height:1.7}
+.sqr-l{font-family:"Cinzel",serif;font-size:8.5px;letter-spacing:.18em;color:var(--gold);display:block;margin-bottom:.35rem}
+
+/* ═══ ACHIEVEMENTS ══════════════════════════════════════════ */
+.ach-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(235px,1fr));gap:1rem;margin-top:1.5rem}
+.ach{background:var(--bg3);clip-path:polygon(10px 0,calc(100% - 10px) 0,100% 10px,100% calc(100% - 10px),calc(100% - 10px) 100%,10px 100%,0 calc(100% - 10px),0 10px);padding:1.25rem;display:flex;gap:.85rem;align-items:flex-start}
+.ach-hex{width:44px;height:44px;flex-shrink:0;clip-path:polygon(50% 0,100% 25%,100% 75%,50% 100%,0 75%,0 25%);background:var(--bg4);display:flex;align-items:center;justify-content:center;font-size:1.1rem;color:var(--gold);border:1px solid var(--gbd)}
+.ach-title{font-family:"Cinzel",serif;font-size:10.5px;letter-spacing:.08em;color:var(--text);margin-bottom:.3rem;font-weight:600;line-height:1.3}
+.ach-txt{font-size:13.5px;color:var(--dim);line-height:1.6}
+
+/* ═══ ONTOLOGY DIAGRAM ══════════════════════════════════════ */
+.ont-box{background:var(--bg4);clip-path:polygon(8px 0,calc(100% - 8px) 0,100% 8px,100% calc(100% - 8px),calc(100% - 8px) 100%,8px 100%,0 calc(100% - 8px),0 8px);padding:1.25rem;margin-top:1.5rem;overflow:hidden}
+
+/* ═══ CHARACTER SHEETS ══════════════════════════════════════ */
+.char-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:1.25rem;margin-top:1.5rem}
+.char{background:var(--bg3);clip-path:polygon(10px 0,calc(100% - 10px) 0,100% 10px,100% calc(100% - 10px),calc(100% - 10px) 100%,10px 100%,0 calc(100% - 10px),0 10px);overflow:hidden}
+.char-photo-wrap{position:relative;width:100%;height:170px;overflow:hidden;background:var(--bg4)}
+.char-photo{width:100%;height:100%;object-fit:cover;display:block;transition:transform .4s ease}
+.char:hover .char-photo{transform:scale(1.04)}
+.char-photo-ph{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:.4rem;pointer-events:none}
+.char-init{font-family:"Cinzel",serif;font-size:2.8rem;font-weight:700;color:var(--gold);opacity:.22;line-height:1}
+.char-photo-lbl{font-family:"Cinzel",serif;font-size:.55rem;letter-spacing:.3em;color:var(--mut)}
+.char-info{padding:1.1rem 1.1rem .9rem}
+.char-nm{font-family:"Cinzel",serif;font-size:.95rem;font-weight:600;color:var(--text);letter-spacing:.05em;margin-bottom:.2rem}
+.char-cl{font-family:"Cinzel",serif;font-size:.68rem;letter-spacing:.1em;color:var(--gold);opacity:.7;margin-bottom:.6rem;text-transform:uppercase}
+.char-desc{font-size:13px;color:var(--dim);line-height:1.6;margin-bottom:.85rem}
+.char-gh{font-family:"JetBrains Mono",monospace;font-size:.72rem;color:var(--mut);text-decoration:none;transition:color .2s;display:inline-flex;align-items:center;gap:.4rem}
+.char-gh:hover{color:var(--gold)}
+
+/* ═══ PROPERTY TABLE ═════════════════════════════════════════ */
+.ptbl{width:100%;border-collapse:collapse;font-size:13px;margin-top:.75rem}
+.ptbl th{font-family:"Cinzel",serif;font-size:8.5px;letter-spacing:.2em;color:var(--mut);text-transform:uppercase;padding:6px 10px;border-bottom:1px solid rgba(255,255,255,.05);text-align:left;font-weight:400}
+.ptbl td{padding:7px 10px;border-bottom:1px solid rgba(255,255,255,.03);color:var(--text);vertical-align:top}
+.ptbl td:first-child{font-family:"JetBrains Mono",monospace;font-size:11.5px;color:var(--gold)}
+.ptbl tr:hover td{background:rgba(255,255,255,.015)}
+
+/* ═══ DISCOVERED NOTIF ══════════════════════════════════════ */
+#disc{position:fixed;bottom:2.5rem;left:50%;transform:translateX(-50%) translateY(16px);opacity:0;transition:opacity .3s,transform .3s;pointer-events:none;z-index:999;font-family:"Cinzel",serif;font-size:10.5px;letter-spacing:.2em;padding:9px 28px;color:var(--gb);background:rgba(200,160,16,.07);clip-path:polygon(8px 0,calc(100% - 8px) 0,100% 8px,100% calc(100% - 8px),calc(100% - 8px) 100%,8px 100%,0 calc(100% - 8px),0 8px);border:1px solid var(--gbd);white-space:nowrap;text-shadow:0 0 12px rgba(200,160,16,.4)}
+#disc.show{opacity:1;transform:translateX(-50%) translateY(0)}
+
+/* ═══ FOOTER ═════════════════════════════════════════════════ */
+footer{border-top:1px solid var(--gbd);padding:2.5rem 2rem;text-align:center;background:var(--bg2)}
+.ftitle{font-family:"Cinzel Decorative",serif;font-size:13px;font-weight:700;color:var(--gold);letter-spacing:.13em;margin-bottom:.4rem;text-shadow:0 0 24px rgba(200,160,16,.35)}
+.fsub{font-size:13px;color:var(--mut)}
+.flinks{display:flex;gap:2rem;justify-content:center;margin-top:.75rem;flex-wrap:wrap}
+.flinks a{font-family:"Cinzel",serif;font-size:9px;letter-spacing:.13em;color:var(--mut);text-decoration:none;transition:color .2s}
+.flinks a:hover{color:var(--gold)}
+
+/* ═══ ANIMATIONS ════════════════════════════════════════════ */
+@keyframes fu{from{opacity:0;transform:translateY(18px)}to{opacity:1;transform:translateY(0)}}
+.rev{opacity:0;transform:translateY(22px);transition:opacity .75s ease,transform .75s ease}
+.rev.vis{opacity:1;transform:translateY(0)}
+@media(max-width:720px){.two,.cgrid{grid-template-columns:1fr}.nlinks{display:none}.hstats{flex-wrap:wrap;justify-content:center;gap:1rem}.hd{display:none}.hf{padding:2rem 1.5rem}}
+</style>
+</head>
+<body>
+
+<div id="disc">&#9670; &nbsp; DISCOVERED</div>
+
+<nav>
+  <a class="nbrand" href="#hero">CLAIMS OF TAMRIEL</a>
+  <ul class="nlinks">
+    <li><a href="#overview">The World</a></li>
+    <li><a href="#framework">The Conflict</a></li>
+    <li><a href="#ontology">The Tome</a></li>
+    <li><a href="#network">War Table</a></li>
+    <li><a href="#sparql">The Codex</a></li>
+    <li><a href="#team">The Scribes</a></li>
+  </ul>
+</nav>
+
+<!-- ═══ HERO ══════════════════════════════════════════════ -->
+<div id="hero">
+  <canvas id="starfield"></canvas>
+  <div class="fog"><div class="fo a"></div><div class="fo b"></div><div class="fo c"></div></div>
+  <div class="hi">
+    <div class="hf">
+      <!-- Angular SVG border frame -->
+      <div class="hf-border">
+        <svg viewBox="0 0 660 290" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+          <!-- Main octagonal border -->
+          <polygon points="28,0 632,0 660,28 660,262 632,290 28,290 0,262 0,28" fill="none" stroke="rgba(200,160,16,0.3)" stroke-width="1"/>
+          <!-- Corner accent fills -->
+          <polygon points="0,28 28,0 48,0 0,48" fill="rgba(200,160,16,0.45)"/>
+          <polygon points="660,28 632,0 612,0 660,48" fill="rgba(200,160,16,0.45)"/>
+          <polygon points="660,262 632,290 612,290 660,242" fill="rgba(200,160,16,0.45)"/>
+          <polygon points="0,262 28,290 48,290 0,242" fill="rgba(200,160,16,0.45)"/>
+          <!-- Horizontal decorative lines -->
+          <line x1="60" y1="0" x2="600" y2="0" stroke="rgba(200,160,16,0.12)" stroke-width="1"/>
+          <line x1="60" y1="290" x2="600" y2="290" stroke="rgba(200,160,16,0.12)" stroke-width="1"/>
+          <!-- Inner subtle lines -->
+          <line x1="40" y1="12" x2="620" y2="12" stroke="rgba(200,160,16,0.07)" stroke-width="0.5"/>
+          <line x1="40" y1="278" x2="620" y2="278" stroke="rgba(200,160,16,0.07)" stroke-width="0.5"/>
+          <!-- Diamond accents mid-sides -->
+          <polygon points="0,145 8,138 16,145 8,152" fill="rgba(200,160,16,0.3)"/>
+          <polygon points="660,145 652,138 644,145 652,152" fill="rgba(200,160,16,0.3)"/>
+        </svg>
+      </div>
+      <p class="kicker">&#9670; &nbsp; KNOWLEDGE REPRESENTATION &amp; EXTRACTION &nbsp; &#9670;</p>
+      <h1 class="htitle">CLAIMS<br>OF <em>TAMRIEL</em></h1>
+      <p class="hsub">An ontology of contested narratives,<br>rival factions, and epistemic conflict</p>
+    </div>
+    <div style="opacity:0;animation:fu .9s .72s forwards">
+      <p style="font-family:Cinzel,serif;font-size:.85rem;letter-spacing:.8em;color:rgba(200,160,16,.25);margin:1.5rem 0">&#9670; &nbsp; &#9670; &nbsp; &#9670;</p>
+    </div>
+    <a href="#overview" class="hero-cta">BEGIN THE JOURNEY</a>
+    <div class="hstats">
+      <div class="hs"><b>8</b><small>Pairs</small></div>
+      <div class="hd"></div>
+      <div class="hs"><b>16</b><small>Claims</small></div>
+      <div class="hd"></div>
+      <div class="hs"><b>12</b><small>Characters</small></div>
+      <div class="hd"></div>
+      <div class="hs"><b>8</b><small>Factions</small></div>
+      <div class="hd"></div>
+      <div class="hs"><b>3</b><small>Conflict Types</small></div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ THE WORLD ══════════════════════════════════════════ -->
+<section id="overview">
+  <div class="rev">
+    <p class="chapter">I &nbsp;&#183;&nbsp; The World</p>
+    <h2>An Ontology of the <em>Contested</em></h2>
+    <div class="rule"></div>
+  </div>
+  <div class="two rev" style="transition-delay:.1s">
+    <div>
+      <h3>Why Skyrim?</h3>
+      <p>The Elder Scrolls V: Skyrim is an unusually rich KR domain because it <strong>deliberately withholds ground truth</strong>. The same territory, deity, or political act is interpreted by different factions in ways that cannot be reconciled — not due to incomplete data, but because the contradictions are constitutive of the world.</p>
+      <p>Unlike a typical ontology that encodes <strong>facts</strong>, this project encodes <strong>claims</strong>: assertions held by specific agents, grounded in specific evidence, and in explicit conflict with other assertions.</p>
+      <blockquote><p>The same event — the death of a High King, the divinity of Talos, the legitimacy of a resistance movement — is simultaneously true and false depending on who is speaking.</p></blockquote>
+    </div>
+    <div>
+      <h3>The Design Principle</h3>
+      <p><strong>Epistemic pluralism</strong> is operationalized as a structural commitment: no claim is marked as correct, no faction as authoritative. Every assertion is relativized to its holder. The ontology models the <em>structure of disagreement</em>, not its resolution.</p>
+      <p>This architecture is domain-neutral: the same pattern — Claim, Holder, ClaimType, three conflict relations, contested evidence — applies equally to news media bias, historical revisionism, or legal testimony.</p>
+      <p style="font-family:Cinzel,serif;font-size:.75rem;letter-spacing:.1em;color:var(--mut)">Version 5.0 &nbsp;&#183;&nbsp; dc:creator "Atakan Kay&#305;" &nbsp;&#183;&nbsp; KR&amp;KE Project</p>
+    </div>
+  </div>
+  <div class="stgrid rev" style="transition-delay:.2s">
+    <div class="stcard"><span class="stn">7</span><span class="stl">Classes</span></div>
+    <div class="stcard"><span class="stn">16</span><span class="stl">Claims</span></div>
+    <div class="stcard"><span class="stn">8</span><span class="stl">Pairs</span></div>
+    <div class="stcard"><span class="stn">12</span><span class="stl">Characters</span></div>
+    <div class="stcard"><span class="stn">8</span><span class="stl">Factions</span></div>
+    <div class="stcard"><span class="stn">3</span><span class="stl">Conflict Types</span></div>
+    <div class="stcard"><span class="stn">4</span><span class="stl">OWL Axioms</span></div>
+    <div class="stcard"><span class="stn">4</span><span class="stl">Alignments</span></div>
+    <div class="stcard"><span class="stn">1</span><span class="stl">Chain Axiom</span></div>
+    <div class="stcard"><span class="stn">11</span><span class="stl">SKOS Links</span></div>
+  </div>
+</section>
+
+<!-- ═══ THE CONFLICT ══════════════════════════════════════ -->
+<div class="sfull d2" id="framework">
+<div class="sin">
+  <div class="rev">
+    <p class="chapter">II &nbsp;&#183;&nbsp; The Conflict</p>
+    <h2>Three Laws of <em>Disagreement</em></h2>
+    <div class="rule"></div>
+  </div>
+  <div class="two rev" style="transition-delay:.1s">
+    <div>
+      <p>Most ontologies encode the world as it is. This ontology encodes the world as it is <em style="color:var(--gold);font-style:italic">argued to be</em>. The challenge is not to represent facts but to represent the <strong>social and epistemic structure of factual dispute</strong>.</p>
+      <p>Three theoretical commitments shape the architecture. Claims are first-class reified entities. Conflict is typed — not all disagreements carry the same logical weight. Neutrality is representable as structured absence.</p>
+      <blockquote><p>The ontology does not take sides. It models the structure of taking sides — who claims what, against whom, on what grounds, and through what kind of opposition.</p></blockquote>
+    </div>
+    <ul class="nlist">
+      <li>
+        <span class="nnum">I</span>
+        <div class="nbdy">
+          <h4>Logical Contradiction</h4>
+          <p><span class="badge b-r">contradicts</span> — Symmetric (owl:SymmetricProperty). Strict logical opposition: if one is true, the other must be false. Used for 6 of 8 pairs — sovereignty, theology, territorial claims.</p>
+        </div>
+      </li>
+      <li>
+        <span class="nnum">II</span>
+        <div class="nbdy">
+          <h4>Interpretive Difference</h4>
+          <p><span class="badge b-a">disputes</span> — Symmetric. Conflicting interpretations of the same entity where both positions could be valid within their own framework. Used for 2 pairs: the cosmological and moral-philosophical disputes.</p>
+        </div>
+      </li>
+      <li>
+        <span class="nnum">III</span>
+        <div class="nbdy">
+          <h4>Active Rejection</h4>
+          <p><span class="badge b-r">denies</span> — Directional, asymmetric. Active, explicit repudiation. Only the Talos pair uses it in both directions — making it the most adversarial dispute. Not just disagreement: propaganda.</p>
+        </div>
+      </li>
+    </ul>
+  </div>
+</div>
+</div>
+
+<!-- ═══ THE TOME / ONTOLOGY ════════════════════════════════ -->
+<section id="ontology">
+  <div class="rev">
+    <p class="chapter">III &nbsp;&#183;&nbsp; The Tome</p>
+    <h2>The <em>Ontology</em></h2>
+    <div class="rule"></div>
+    <p style="max-width:600px;font-size:.95rem">OWL ontology serialized in Turtle. IRI: <code style="font-family:JetBrains Mono,monospace;font-size:.82em;color:var(--gold)">http://www.semanticweb.org/skyrim/ontology#</code></p>
+  </div>
+
+  <!-- SVG Class Diagram -->
+  <div class="ont-box rev" style="transition-delay:.05s">
+    <svg viewBox="0 0 660 230" role="img" xmlns="http://www.w3.org/2000/svg">
+      <title>Claims of Tamriel — ontology class diagram</title>
+      <defs>
+        <marker id="ah" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="5" markerHeight="5" orient="auto-start-reverse">
+          <path d="M2 2L8 5L2 8" fill="none" stroke="context-stroke" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+        </marker>
+      </defs>
+      <!-- Character box -->
+      <rect x="8" y="58" width="144" height="52" rx="0" fill="#0a1828" stroke="var(--ice)" stroke-width="0.8"/>
+      <line x1="8" y1="58" x2="20" y2="46" stroke="var(--ice)" stroke-width="0.8"/><line x1="20" y1="46" x2="152" y2="46" stroke="var(--ice)" stroke-width="0.8"/><line x1="152" y1="58" x2="152" y2="46" stroke="#2c5a8c" stroke-width="0.8"/>
+      <text x="80" y="80" font-family="Cinzel, serif" font-size="12" font-weight="600" fill="#6898d0" text-anchor="middle">Character</text>
+      <text x="80" y="98" font-family="JetBrains Mono, monospace" font-size="9.5" fill="#3870a8" text-anchor="middle">12 individuals</text>
+      <!-- Faction box -->
+      <rect x="8" y="168" width="144" height="52" rx="0" fill="#200808" stroke="var(--blood)" stroke-width="0.8"/>
+      <line x1="8" y1="168" x2="20" y2="156" stroke="var(--blood)" stroke-width="0.8"/><line x1="20" y1="156" x2="152" y2="156" stroke="var(--blood)" stroke-width="0.8"/><line x1="152" y1="168" x2="152" y2="156" stroke="var(--blood)" stroke-width="0.8"/>
+      <text x="80" y="190" font-family="Cinzel, serif" font-size="12" font-weight="600" fill="#c05050" text-anchor="middle">Faction</text>
+      <text x="80" y="208" font-family="JetBrains Mono, monospace" font-size="9.5" fill="#903030" text-anchor="middle">8 individuals</text>
+      <!-- Claim box (centre, larger) -->
+      <rect x="238" y="50" width="178" height="68" rx="0" fill="#201400" stroke="var(--gold)" stroke-width="1"/>
+      <line x1="238" y1="50" x2="254" y2="34" stroke="var(--gold)" stroke-width="1"/><line x1="254" y1="34" x2="416" y2="34" stroke="var(--gold)" stroke-width="1"/><line x1="416" y1="50" x2="416" y2="34" stroke="#d4a030" stroke-width="1"/>
+      <text x="327" y="76" font-family="Cinzel, serif" font-size="13" font-weight="700" fill="#f0d020" text-anchor="middle">Claim</text>
+      <text x="327" y="96" font-family="JetBrains Mono, monospace" font-size="9.5" fill="var(--gold)" text-anchor="middle">16 claims · 8 pairs</text>
+      <!-- ClaimType box -->
+      <rect x="492" y="58" width="160" height="52" rx="0" fill="#080c20" stroke="var(--ice)" stroke-width="0.8"/>
+      <line x1="492" y1="58" x2="504" y2="46" stroke="var(--ice)" stroke-width="0.8"/><line x1="504" y1="46" x2="652" y2="46" stroke="var(--ice)" stroke-width="0.8"/><line x1="652" y1="58" x2="652" y2="46" stroke="var(--ice)" stroke-width="0.8"/>
+      <text x="572" y="80" font-family="Cinzel, serif" font-size="12" font-weight="600" fill="#9878d0" text-anchor="middle">ClaimType</text>
+      <text x="572" y="98" font-family="JetBrains Mono, monospace" font-size="9.5" fill="var(--ice)" text-anchor="middle">11 vocab items</text>
+      <!-- Item/City/Race box -->
+      <rect x="238" y="168" width="178" height="52" rx="0" fill="#141008" stroke="#504830" stroke-width="0.8"/>
+      <line x1="238" y1="168" x2="250" y2="156" stroke="#504830" stroke-width="0.8"/><line x1="250" y1="156" x2="416" y2="156" stroke="#504830" stroke-width="0.8"/><line x1="416" y1="168" x2="416" y2="156" stroke="#605868" stroke-width="0.8"/>
+      <text x="327" y="190" font-family="Cinzel, serif" font-size="11.5" font-weight="600" fill="#907858" text-anchor="middle">Item &#183; City &#183; Race</text>
+      <text x="327" y="208" font-family="JetBrains Mono, monospace" font-size="9.5" fill="#504030" text-anchor="middle">target entities</text>
+      <!-- Arrows -->
+      <line x1="152" y1="84" x2="236" y2="84" stroke="var(--gold)" stroke-width="0.9" marker-end="url(#ah)"/>
+      <text x="194" y="77" font-family="JetBrains Mono, monospace" font-size="8.5" fill="#403020" text-anchor="middle">hasClaimHolder</text>
+      <line x1="416" y1="84" x2="490" y2="84" stroke="var(--ice)" stroke-width="0.9" marker-end="url(#ah)"/>
+      <text x="453" y="77" font-family="JetBrains Mono, monospace" font-size="8.5" fill="#403020" text-anchor="middle">hasClaimTypeIRI</text>
+      <line x1="80" y1="110" x2="80" y2="166" stroke="var(--ice)" stroke-width="0.9" marker-end="url(#ah)"/>
+      <text x="56" y="142" font-family="JetBrains Mono, monospace" font-size="8.5" fill="#403020" text-anchor="middle" transform="rotate(-90,56,142)">memberOf</text>
+      <line x1="327" y1="118" x2="327" y2="166" stroke="#504830" stroke-width="0.9" marker-end="url(#ah)"/>
+      <text x="354" y="146" font-family="JetBrains Mono, monospace" font-size="8.5" fill="#403020" text-anchor="start">hasTarget</text>
+      <!-- Self-loop: contradicts/disputes/denies -->
+      <path d="M 272 50 C 252 10 400 10 382 50" fill="none" stroke="var(--blood)" stroke-width="0.9" stroke-dasharray="4 2.5" marker-end="url(#ah)"/>
+      <text x="327" y="8" font-family="JetBrains Mono, monospace" font-size="8.5" fill="var(--blood)" text-anchor="middle">contradicts &#183; disputes &#183; denies</text>
+    </svg>
+  </div>
+
+  <div class="two rev" style="margin-top:2rem;gap:2rem;transition-delay:.15s">
+    <div>
+      <h3>Core Classes</h3>
+      <table class="ptbl">
+        <tr><th>Class</th><th>Count</th><th>Role</th></tr>
+        <tr><td>:Claim</td><td>16</td><td>Central reified proposition</td></tr>
+        <tr><td>:Character</td><td>12</td><td>Claim holders and framers</td></tr>
+        <tr><td>:Faction</td><td>8</td><td>Collective affiliations</td></tr>
+        <tr><td>:ClaimType</td><td>11</td><td>Controlled vocabulary</td></tr>
+        <tr><td>:Item / :City / :Race</td><td>18+</td><td>Claim targets &amp; evidence</td></tr>
+      </table>
+    </div>
+    <div>
+      <h3>Key Object Properties</h3>
+      <table class="ptbl">
+        <tr><th>Property</th><th>Characteristic</th></tr>
+        <tr><td>:contradicts</td><td>SymmetricProperty</td></tr>
+        <tr><td>:disputes</td><td>SymmetricProperty</td></tr>
+        <tr><td>:denies</td><td><span class="badge b-r" style="font-size:8px">IrreflexiveProperty</span> directional</td></tr>
+        <tr><td>:framesAs / :isFramedBy</td><td>InverseOf pair</td></tr>
+        <tr><td>:hasClaimTypeIRI</td><td><span class="badge b-a" style="font-size:8px">FunctionalProperty</span></td></tr>
+        <tr><td>:hasClaimHolder</td><td>subPropertyOf prov:wasAttributedTo</td></tr>
+        <tr><td>:hasOpposingHolder</td><td><span class="badge b-p" style="font-size:8px">PropertyChain</span> inferred</td></tr>
+        <tr><td>:memberOf</td><td>Character &#8594; Faction</td></tr>
+      </table>
+    </div>
+  </div>
+
+
+
+  <!-- Linked Data Alignment -->
+  <div class="rev" style="transition-delay:.22s">
+    <p style="font-family:Cinzel,serif;font-size:.65rem;letter-spacing:.2em;color:var(--mut);margin-bottom:.75rem">LINKED DATA ALIGNMENT</p>
+    <div style="display:flex;flex-wrap:wrap;gap:.6rem;margin-bottom:2rem">
+      <div style="background:var(--bg3);clip-path:polygon(6px 0,calc(100% - 6px) 0,100% 6px,100% calc(100% - 6px),calc(100% - 6px) 100%,6px 100%,0 calc(100% - 6px),0 6px);padding:.6rem 1rem;display:flex;align-items:center;gap:.6rem">
+        <span style="font-family:Cinzel,serif;font-size:.65rem;letter-spacing:.1em;color:var(--mut)">:Character</span>
+        <span style="color:var(--mut);font-size:.75rem">&#8594;</span>
+        <span style="font-family:JetBrains Mono,monospace;font-size:.72rem;color:#60c8a8">foaf:Person</span>
+      </div>
+      <div style="background:var(--bg3);clip-path:polygon(6px 0,calc(100% - 6px) 0,100% 6px,100% calc(100% - 6px),calc(100% - 6px) 100%,6px 100%,0 calc(100% - 6px),0 6px);padding:.6rem 1rem;display:flex;align-items:center;gap:.6rem">
+        <span style="font-family:Cinzel,serif;font-size:.65rem;letter-spacing:.1em;color:var(--mut)">:Faction</span>
+        <span style="color:var(--mut);font-size:.75rem">&#8594;</span>
+        <span style="font-family:JetBrains Mono,monospace;font-size:.72rem;color:#f09070">foaf:Group</span>
+      </div>
+      <div style="background:var(--bg3);clip-path:polygon(6px 0,calc(100% - 6px) 0,100% 6px,100% calc(100% - 6px),calc(100% - 6px) 100%,6px 100%,0 calc(100% - 6px),0 6px);padding:.6rem 1rem;display:flex;align-items:center;gap:.6rem">
+        <span style="font-family:Cinzel,serif;font-size:.65rem;letter-spacing:.1em;color:var(--mut)">:City</span>
+        <span style="color:var(--mut);font-size:.75rem">&#8594;</span>
+        <span style="font-family:JetBrains Mono,monospace;font-size:.72rem;color:#78b8e8">schema:Place</span>
+      </div>
+      <div style="background:var(--bg3);clip-path:polygon(6px 0,calc(100% - 6px) 0,100% 6px,100% calc(100% - 6px),calc(100% - 6px) 100%,6px 100%,0 calc(100% - 6px),0 6px);padding:.6rem 1rem;display:flex;align-items:center;gap:.6rem">
+        <span style="font-family:Cinzel,serif;font-size:.65rem;letter-spacing:.1em;color:var(--mut)">:Claim</span>
+        <span style="color:var(--mut);font-size:.75rem">&#8594;</span>
+        <span style="font-family:JetBrains Mono,monospace;font-size:.72rem;color:#c0a8f0">prov:Entity</span>
+      </div>
+      <div style="background:var(--bg3);clip-path:polygon(6px 0,calc(100% - 6px) 0,100% 6px,100% calc(100% - 6px),calc(100% - 6px) 100%,6px 100%,0 calc(100% - 6px),0 6px);padding:.6rem 1rem;display:flex;align-items:center;gap:.6rem">
+        <span style="font-family:Cinzel,serif;font-size:.65rem;letter-spacing:.1em;color:var(--mut)">:hasClaimHolder</span>
+        <span style="color:var(--mut);font-size:.75rem">&#8838;</span>
+        <span style="font-family:JetBrains Mono,monospace;font-size:.72rem;color:#c0a8f0">prov:wasAttributedTo</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- OWL Axioms + Property Chain -->
+  <div class="two rev" style="gap:2rem;transition-delay:.24s">
+    <div>
+      <p style="font-family:Cinzel,serif;font-size:.65rem;letter-spacing:.2em;color:var(--mut);margin-bottom:.75rem">OWL AXIOMS</p>
+      <div class="ont-box" style="margin-top:0">
+        <p style="font-family:Cinzel,serif;font-size:.65rem;letter-spacing:.12em;color:var(--gold);margin-bottom:.5rem">RESTRICTIONS ON :Claim</p>
+        <pre style="font-family:JetBrains Mono,monospace;font-size:11px;color:#c0b898;line-height:1.7;margin:0;white-space:pre-wrap">:Claim rdfs:subClassOf
+  [ owl:onProperty :hasClaimHolder ;
+    <span style="color:#d4a030">owl:someValuesFrom</span> :Character ] ,
+  [ owl:onProperty :hasClaimTypeIRI ;
+    <span style="color:#d4a030">owl:qualifiedCardinality "1"</span> ;
+    owl:onClass :ClaimType ] .
+
+<span style="color:#505870">[ a owl:AllDisjointClasses ;</span>
+<span style="color:#505870">  owl:members ( :Character :Faction</span>
+<span style="color:#505870">    :City :Race :Item :Claim ) ] .</span></pre>
+      </div>
+    </div>
+    <div>
+      <p style="font-family:Cinzel,serif;font-size:.65rem;letter-spacing:.2em;color:var(--mut);margin-bottom:.75rem">PROPERTY CHAIN AXIOM</p>
+      <div class="ont-box" style="margin-top:0">
+        <p style="font-family:Cinzel,serif;font-size:.65rem;letter-spacing:.12em;color:var(--gold);margin-bottom:.75rem">:hasOpposingHolder — inferred</p>
+        <svg viewBox="0 0 310 90" xmlns="http://www.w3.org/2000/svg" style="width:100%;display:block;margin-bottom:.75rem">
+          <defs><marker id="ca" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="5" markerHeight="5" orient="auto-start-reverse"><path d="M2 2L8 5L2 8" fill="none" stroke="context-stroke" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></marker></defs>
+          <rect x="2" y="20" width="72" height="32" fill="#1a1000" stroke="#b89010" stroke-width="0.8"/>
+          <text x="38" y="40" font-family="Cinzel,serif" font-size="9" fill="#f0c060" text-anchor="middle">CLM-A001</text>
+          <rect x="118" y="20" width="72" height="32" fill="#1a1000" stroke="#b89010" stroke-width="0.8"/>
+          <text x="154" y="40" font-family="Cinzel,serif" font-size="9" fill="#f0c060" text-anchor="middle">CLM-B001</text>
+          <rect x="234" y="20" width="72" height="32" fill="#0a1828" stroke="var(--ice)" stroke-width="0.8"/>
+          <text x="270" y="40" font-family="Cinzel,serif" font-size="9" fill="#6898d0" text-anchor="middle">Tullius</text>
+          <line x1="74" y1="36" x2="116" y2="36" stroke="var(--blood)" stroke-width="0.8" marker-end="url(#ca)"/>
+          <text x="95" y="30" font-family="JetBrains Mono,monospace" font-size="7" fill="var(--blood)" text-anchor="middle">:contradicts</text>
+          <line x1="190" y1="36" x2="232" y2="36" stroke="#d4a030" stroke-width="0.8" marker-end="url(#ca)"/>
+          <text x="211" y="30" font-family="JetBrains Mono,monospace" font-size="7" fill="#b89010" text-anchor="middle">:hasClaimHolder</text>
+          <path d="M 38 52 Q 38 75 154 80 Q 270 75 270 52" fill="none" stroke="#9870c0" stroke-width="0.8" stroke-dasharray="4 2" marker-end="url(#ca)"/>
+          <text x="154" y="88" font-family="JetBrains Mono,monospace" font-size="7" fill="#9870c0" text-anchor="middle">:hasOpposingHolder (inferred)</text>
+        </svg>
+        <p style="font-size:12.5px;color:var(--dim);line-height:1.6">The reasoner infers this automatically: CLM-A001's opposing holder is Tullius. No direct assertion required.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- SKOS Hierarchy -->
+  <div class="rev" style="margin-top:2rem;transition-delay:.26s">
+    <p style="font-family:Cinzel,serif;font-size:.65rem;letter-spacing:.2em;color:var(--mut);margin-bottom:.75rem">SKOS CLAIMTYPE HIERARCHY</p>
+    <div class="ont-box" style="margin-top:0">
+      <svg viewBox="0 0 640 200" xmlns="http://www.w3.org/2000/svg" style="width:100%;display:block">
+        <defs><marker id="sb" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="4" markerHeight="4" orient="auto-start-reverse"><path d="M2 2L8 5L2 8" fill="none" stroke="context-stroke" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></marker></defs>
+        <!-- Primary column header -->
+        <text x="4" y="12" font-family="Cinzel,serif" font-size="8" fill="#5a5248" letter-spacing="2">PRIMARY</text>
+        <text x="354" y="12" font-family="Cinzel,serif" font-size="8" fill="#5a5248" letter-spacing="2">NARROWER (skos:narrower)</text>
+        <!-- Row 1: Territorial → Sovereignty -->
+        <rect x="2" y="18" width="140" height="22" fill="#1a1000" stroke="#b89010" stroke-width="0.6"/>
+        <text x="72" y="32" font-family="JetBrains Mono,monospace" font-size="9" fill="#b89010" text-anchor="middle">TerritorialClaim</text>
+        <line x1="142" y1="29" x2="350" y2="29" stroke="#b89010" stroke-width="0.6" marker-end="url(#sb)"/>
+        <rect x="352" y="18" width="145" height="22" fill="#301a00" stroke="var(--gold)" stroke-width="0.6"/>
+        <text x="424" y="32" font-family="JetBrains Mono,monospace" font-size="9" fill="var(--gold)" text-anchor="middle">SovereigntyClaim</text>
+        <!-- Row 2: Theological → Counter + TM -->
+        <rect x="2" y="48" width="140" height="22" fill="#201848" stroke="var(--ice)" stroke-width="0.6"/>
+        <text x="72" y="62" font-family="JetBrains Mono,monospace" font-size="9" fill="var(--ice)" text-anchor="middle">TheologicalClaim</text>
+        <line x1="142" y1="56" x2="350" y2="56" stroke="var(--ice)" stroke-width="0.6" marker-end="url(#sb)"/>
+        <rect x="352" y="48" width="145" height="22" fill="#060c1c" stroke="#1e4878" stroke-width="0.6"/>
+        <text x="424" y="62" font-family="JetBrains Mono,monospace" font-size="8.5" fill="var(--ice)" text-anchor="middle">TheologicalCounterClaim</text>
+        <line x1="142" y1="62" x2="350" y2="74" stroke="var(--ice)" stroke-width="0.6" marker-end="url(#sb)"/>
+        <rect x="352" y="68" width="145" height="22" fill="#060c1c" stroke="#1e4878" stroke-width="0.6"/>
+        <text x="424" y="82" font-family="JetBrains Mono,monospace" font-size="8.5" fill="var(--ice)" text-anchor="middle">TheologicalMoralClaim</text>
+        <line x1="497" y1="79" x2="540" y2="105" stroke="#2c5a8c" stroke-width="0.5" stroke-dasharray="3 2"/>
+        <text x="545" y="108" font-family="JetBrains Mono,monospace" font-size="7" fill="#2c5a8c">skos:related</text>
+        <!-- Row 3: Political -->
+        <rect x="2" y="100" width="140" height="22" fill="#080e20" stroke="#2c5a8c" stroke-width="0.6"/>
+        <text x="72" y="114" font-family="JetBrains Mono,monospace" font-size="9" fill="#6898c8" text-anchor="middle">PoliticalClaim</text>
+        <line x1="142" y1="111" x2="350" y2="111" stroke="#2c5a8c" stroke-width="0.6" marker-end="url(#sb)"/>
+        <rect x="352" y="100" width="145" height="22" fill="#060c1c" stroke="#1e4878" stroke-width="0.6"/>
+        <text x="424" y="114" font-family="JetBrains Mono,monospace" font-size="8.5" fill="#6898c8" text-anchor="middle">PoliticalCounterClaim</text>
+        <!-- Row 4: Moral -->
+        <rect x="2" y="130" width="140" height="22" fill="#3a1408" stroke="var(--blood)" stroke-width="0.6"/>
+        <text x="72" y="144" font-family="JetBrains Mono,monospace" font-size="9" fill="#d06060" text-anchor="middle">MoralClaim</text>
+        <line x1="142" y1="141" x2="350" y2="141" stroke="var(--blood)" stroke-width="0.6" marker-end="url(#sb)"/>
+        <rect x="352" y="130" width="145" height="22" fill="#100404" stroke="var(--blood)" stroke-width="0.6"/>
+        <text x="424" y="144" font-family="JetBrains Mono,monospace" font-size="8.5" fill="#d06060" text-anchor="middle">MoralCounterClaim</text>
+        <!-- Row 5: Cosmological -->
+        <rect x="2" y="160" width="140" height="22" fill="#100c00" stroke="var(--gold)" stroke-width="0.6"/>
+        <text x="72" y="174" font-family="JetBrains Mono,monospace" font-size="8.5" fill="#c0a030" text-anchor="middle">CosmologicalClaim</text>
+        <line x1="142" y1="171" x2="350" y2="171" stroke="var(--gold)" stroke-width="0.6" marker-end="url(#sb)"/>
+        <rect x="352" y="160" width="145" height="22" fill="#0c0a00" stroke="var(--gold)" stroke-width="0.6"/>
+        <text x="424" y="174" font-family="JetBrains Mono,monospace" font-size="8" fill="#c0a030" text-anchor="middle">CosmologicalCounterClaim</text>
+        <!-- Supremacist standalone -->
+        <rect x="2" y="160" width="140" height="0" fill="none"/>
+        <text x="510" y="185" font-family="JetBrains Mono,monospace" font-size="8" fill="#6a5838">SupremacistClaim (standalone)</text>
+      </svg>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ WAR TABLE ══════════════════════════════════════════ -->
+<div class="sfull d2" id="network">
+<div class="sin">
+  <div class="rev">
+    <p class="chapter">IV &nbsp;&#183;&nbsp; War Table</p>
+    <h2>Eight <em>Contested</em> Disputes</h2>
+    <div class="rule"></div>
+    <p style="font-size:.95rem;margin-bottom:1.5rem">Each pair represents a single disputed question answered irreconcilably by two parties. Click either side to inspect its full metadata.</p>
+  </div>
+  <div class="rev" style="transition-delay:.1s">
+    <div class="war-intro">
+      <span>&#9670; Primary Claim</span>
+      <span>&#9670; Counter-Claim</span>
+    </div>
+    <div class="claim-grid" id="pairs"></div>
+  </div>
+</div>
+</div>
+
+<!-- ═══ THE CODEX / SPARQL ═════════════════════════════════ -->
+<section id="sparql">
+  <div class="rev">
+    <p class="chapter">V &nbsp;&#183;&nbsp; The Codex</p>
+    <h2>SPARQL <em>Queries</em></h2>
+    <div class="rule"></div>
+    <p style="font-size:.95rem;margin-bottom:1.25rem">These competency questions drove the property architecture. Each query validates a design decision and extracts non-obvious knowledge from the ontology.</p>
+  </div>
+  <div class="codex rev" style="transition-delay:.1s">
+    <div class="ctx">
+      <div class="ct on" onclick="showTab(0)">CQ1 &mdash; Contradicting Pairs</div>
+      <div class="ct" onclick="showTab(1)">CQ2 &mdash; Faction Conflicts</div>
+      <div class="ct" onclick="showTab(2)">CQ3 &mdash; Contested Evidence</div>
+      <div class="ct" onclick="showTab(3)">CQ4 &mdash; Neutrality</div>
+      <div class="ct" onclick="showTab(4)">CQ5 &mdash; Denial Chains</div>
+    </div>
+    <div id="sq0" class="cp on"></div>
+    <div id="sq1" class="cp"></div>
+    <div id="sq2" class="cp"></div>
+    <div id="sq3" class="cp"></div>
+    <div id="sq4" class="cp"></div>
+  </div>
+</section>
+
+<!-- ═══ DISCOVERIES / INSIGHTS ════════════════════════════ -->
+<div class="sfull d2" id="insights">
+<div class="sin">
+  <div class="rev">
+    <p class="chapter">VI &nbsp;&#183;&nbsp; Discoveries</p>
+    <h2>What the Ontology <em>Reveals</em></h2>
+    <div class="rule"></div>
+    <p style="font-size:.95rem;margin-bottom:.5rem">Non-obvious findings extractable through SPARQL — knowledge not stated anywhere in the ontology but emergent from its structure.</p>
+  </div>
+  <div class="ach-grid rev" style="transition-delay:.1s">
+    <div class="ach">
+      <div class="ach-hex">&#9670;</div>
+      <div><p class="ach-title">The Dragonborn as Cosmic Arbiter</p><p class="ach-txt">Frames claims only in existential pairs (moral, cosmological, vampiric). Never territorial or political. This asymmetry — queryable via ClaimType filter — positions them as an agent who intervenes at the level of fate, not governance.</p></div>
+    </div>
+    <div class="ach">
+      <div class="ach-hex">&#9830;</div>
+      <div><p class="ach-title">Contested Evidence</p><p class="ach-txt">Auriel's Bow and the Elder Scroll are each cited by directly opposing claims. The same artifact simultaneously grounds a liberation argument and a prevention argument. Contested evidence, not contested fact.</p></div>
+    </div>
+    <div class="ach">
+      <div class="ach-hex">&#8709;</div>
+      <div><p class="ach-title">Machine-Readable Neutrality</p><p class="ach-txt">Balgruuf's political neutrality is encoded as the absence of framesAs assertions. A single FILTER NOT EXISTS query returns exactly one result: him. Structured absence is a valid KR technique.</p></div>
+    </div>
+    <div class="ach">
+      <div class="ach-hex">&#8594;</div>
+      <div><p class="ach-title">Denial is Rare &amp; Propagandistic</p><p class="ach-txt">Only the Talos pair uses the directional denies relation — and both sides use it. This bidirectionality marks it as uniquely adversarial: not just logical contradiction but active propaganda. Queryable and provable.</p></div>
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- ═══ THE SCRIBES / TEAM ══════════════════════════════════ -->
+<section id="team">
+  <div class="rev">
+    <p class="chapter">VII &nbsp;&#183;&nbsp; The Team</p>
+    <h2>Behind the <em>Claims</em></h2>
+    <div class="rule"></div>
+  <div class="char-grid rev" style="transition-delay:.1s">
+
+    <!-- Card 1 -->
+    <div class="char">
+      <div class="char-photo-wrap">
+        <img src="https://github.com/GrandTuvalet.png" class="char-photo" alt="Atakan Kayı" onerror="this.style.display='none'">
+
+      </div>
+      <div class="char-info">
+        <p class="char-nm">Atakan Kay&#305;</p>
+        <p class="char-cl">Ontology Design & Knowledge Modelling</p>
+        <p class="char-desc">Designed the epistemic pluralism framework and the three-level conflict vocabulary (contradicts, disputes, denies). Modelled all 8 dispute pairs, 16 claims, 12 characters, and 8 factions.</p>
+        <a href="https://github.com/GrandTuvalet" class="char-gh" target="_blank">&#9670;&nbsp; github.com/GrandTuvalet</a>
+      </div>
+    </div>
+
+    <!-- Card 2 -->
+    <div class="char">
+      <div class="char-photo-wrap">
+        <img src="https://github.com/yunglingwist.png" class="char-photo" alt="Ceyda Uyar" onerror="this.style.display='none'">
+
+      </div>
+      <div class="char-info">
+        <p class="char-nm">Ceyda Uyar</p>
+        <p class="char-cl">SPARQL & Knowledge Extraction</p>
+        <p class="char-desc">Designed the competency questions and wrote the SPARQL queries that extract knowledge from the ontology — including conflict detection, contested evidence, neutrality, and denial chains.</p>
+        <a href="https://github.com/yunglingwist" class="char-gh" target="_blank">&#9670;&nbsp; github.com/yunglingwist</a>
+      </div>
+    </div>
+
+    <!-- Card 3 -->
+    <div class="char">
+      <div class="char-photo-wrap">
+        <img src="https://github.com/yigittakk.png" class="char-photo" alt="Yiğit Ak" onerror="this.style.display='none'">
+      </div>
+      <div class="char-info">
+        <p class="char-nm">Yiğit Ak</p>
+        <p class="char-cl">Ontology Engineering & Web</p>
+        <p class="char-desc">Co-designed the ontology structure and class hierarchy. Added formal reasoning rules, external vocabulary alignment, claim type hierarchy, and automatic inference. Built the project website.</p>
+        <a href="https://github.com/yigittakk" class="char-gh" target="_blank">&#9670;&nbsp; github.com/yigittakk</a>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ═══ FOOTER ════════════════════════════════════════════ -->
+<footer>
+  <p class="ftitle">CLAIMS OF TAMRIEL</p>
+  <p class="fsub">OWL Ontology v5.0 &nbsp;&#183;&nbsp; Knowledge Representation &amp; Knowledge Extraction</p>
+  <p class="fsub" style="margin-top:.3rem">The Elder Scrolls V: Skyrim &copy; Bethesda Game Studios &nbsp;&#183;&nbsp; Ontology data: UESP Wiki (CC BY-SA)</p>
+  <div class="flinks">
+    <a href="https://en.uesp.net/wiki/Skyrim:Skyrim">UESP Wiki</a>
+    <a href="#">Ontology .ttl</a>
+    <a href="#">GitHub</a>
+    <a href="https://en.uesp.net/wiki/Skyrim:Civil_War">Civil War</a>
+  </div>
+</footer>
+
+<script>
+// ── Stars canvas ───────────────────────────────────────────
+const cv=document.getElementById("starfield"),ctx=cv.getContext("2d");
+function stars(){cv.width=innerWidth;cv.height=innerHeight;ctx.clearRect(0,0,cv.width,cv.height);for(let i=0;i<220;i++){const x=Math.random()*cv.width,y=Math.random()*cv.height,r=Math.random()*.65+.08,a=Math.random()*.45+.05;ctx.beginPath();ctx.arc(x,y,r,0,2*Math.PI);ctx.fillStyle=`rgba(212,190,150,${a})`;ctx.fill()}}
+stars();window.addEventListener("resize",stars);
+
+// ── Claim Pairs ────────────────────────────────────────────
+const P=[
+  {num:"I",type:"TERRITORIAL CLAIM",r:"contradicts",rc:"rc",
+   a:{id:"CLM-A001",f:"Stormcloaks",l:"Skyrim belongs to the Nords",c:"Ulfric Stormcloak",col:"var(--gold)",t:"Territorial",ev:"Jagged Crown · Talos Tradition",tgt:"Windhelm",d:"Skyrim belongs to the Nords — it is their land by blood, history, and rightful inheritance."},
+   b:{id:"CLM-B001",f:"Imperial Legion",l:"Skyrim is an Imperial province",c:"General Tullius",col:"var(--ice)",t:"Sovereignty",ev:"White-Gold Concordat",tgt:"Solitude",d:"Skyrim is a province of the Empire; its stability and protection depend on remaining part of it."}},
+  {num:"II",type:"THEOLOGICAL CLAIM",r:"contradicts · denies",rc:"rc",
+   a:{id:"CLM-A002",f:"Stormcloaks",l:"Talos is the 9th Divine",c:"Ulfric Stormcloak",col:"var(--gold)",t:"Theological",ev:"Talos Tradition",tgt:"Talos Tradition",d:"Tiber Septim achieved divinity after death and is rightfully worshipped as Talos, the 9th Divine."},
+   b:{id:"CLM-B002",f:"Thalmor",l:"Talos worship is heresy",c:"Elenwen",col:"var(--ice)",t:"Theological counter",ev:"White-Gold Concordat",tgt:"Talos Tradition",d:"Talos was a mortal man who never achieved divinity; worshipping him is heresy under the White-Gold Concordat."}},
+  {num:"III",type:"POLITICAL CLAIM",r:"contradicts",rc:"rc",
+   a:{id:"CLM-A003",f:"Stormcloaks",l:"Ulfric is a genuine freedom fighter",c:"Ulfric Stormcloak",col:"var(--gold)",t:"Political",ev:"—",tgt:"Ulfric Stormcloak",d:"Ulfric Stormcloak is a genuine freedom fighter seeking Nord cultural and political independence."},
+   b:{id:"CLM-B003",f:"Thalmor",l:"Ulfric is an unwitting Thalmor asset",c:"Elenwen",col:"var(--ice)",t:"Political counter",ev:"Thalmor Dossier on Ulfric",tgt:"Ulfric Stormcloak",d:"Ulfric is an unwitting Thalmor asset — his rebellion keeps the Empire fractured, serving Aldmeri Dominion interests."}},
+  {num:"IV",type:"MORAL CLAIM",r:"contradicts",rc:"rc",
+   a:{id:"CLM-A004",f:"Blades",l:"Paarthurnax must face justice",c:"Delphine",col:"var(--blood)",t:"Moral",ev:"—",tgt:"Paarthurnax",d:"Paarthurnax committed unforgivable atrocities while serving Alduin and must face justice regardless of his later deeds."},
+   b:{id:"CLM-B004",f:"Greybeards",l:"Paarthurnax has earned redemption",c:"Paarthurnax",col:"var(--ice)",t:"Moral counter",ev:"Kodlak's Testament (analogy)",tgt:"Paarthurnax",d:"Paarthurnax has spent millennia atoning for past crimes by guiding humanity; his redemption is real and he deserves to live."}},
+  {num:"V",type:"THEOLOGICAL-MORAL CLAIM",r:"disputes",rc:"rs",
+   a:{id:"CLM-A005",f:"Hunting Grounds",l:"Lycanthropy is Hircine's gift",c:"Hircine",col:"var(--blood)",t:"Theological-Moral",ev:"—",tgt:"Werewolf",d:"Lycanthropy is Hircine's gift: it grants power, freedom, and belonging to the Great Hunt."},
+   b:{id:"CLM-B005",f:"Companions",l:"The werewolf form is a burden",c:"Dragonborn",col:"var(--gold)",t:"Moral counter",ev:"Kodlak's Testament",tgt:"Werewolf",d:"The werewolf curse denies Sovngarde, prevents rest, and traps the soul in Hircine's Hunting Grounds on death."}},
+  {num:"VI",type:"COSMOLOGICAL CLAIM",r:"disputes",rc:"rs",
+   a:{id:"CLM-A006",f:"Ancient Prophecy",l:"Alduin is the prophesied World-Eater",c:"Alduin",col:"var(--blood)",t:"Cosmological",ev:"Elder Scroll",tgt:"Alduin",d:"Alduin's return fulfills the ancient prophecy — he is the World-Eater and the end of the current age."},
+   b:{id:"CLM-B006",f:"Dovahkiin",l:"Alduin is powerful, not inevitable",c:"Dragonborn",col:"var(--gold)",t:"Cosmological counter",ev:"Dragonrend Shout · Elder Scroll",tgt:"Alduin",d:"Alduin is an extraordinarily powerful dragon, but not a cosmic inevitability — he can and must be defeated."}},
+  {num:"VII",type:"TERRITORIAL CLAIM",r:"contradicts",rc:"rc",
+   a:{id:"CLM-A007",f:"Forsworn",l:"The Reach is Reachmen land",c:"Madanach",col:"var(--gold)",t:"Territorial",ev:"Forsworn Uprising History",tgt:"Markarth",d:"Markarth and The Reach are the ancestral homeland of the Reachmen; violently seized by Nord conquerors and still occupied."},
+   b:{id:"CLM-B007",f:"Imperial Legion",l:"The Forsworn are criminals",c:"General Tullius",col:"var(--blood)",t:"Political counter",ev:"—",tgt:"Markarth",d:"The Reach is legitimate Nord and Imperial territory; the Forsworn are dangerous criminals, not a legitimate resistance movement."}},
+  {num:"VIII",type:"SUPREMACIST CLAIM",r:"contradicts",rc:"rc",
+   a:{id:"CLM-A008",f:"Volkihar Clan",l:"Eternal night is vampire liberation",c:"Harkon · Molag Bal",col:"var(--blood)",t:"Supremacist",ev:"Auriel's Bow",tgt:"Vampire",d:"Vampires are the apex predators of Tamriel; blotting out the sun would establish their rightful dominion over mortals."},
+   b:{id:"CLM-B008",f:"Dawnguard",l:"Vampirism is a curse — stop eternal night",c:"Dragonborn",col:"var(--gold)",t:"Moral counter",ev:"Auriel's Bow",tgt:"Vampire",d:"Vampirism is an abomination from Molag Bal's domination; eternal night would destroy all mortal life and must be stopped."}}
+];
+
+let sel=null;
+document.getElementById("pairs").innerHTML=P.map((p,i)=>`
+<div class="pc" id="pc${i}">
+  <div class="ph">
+    <span class="ph-i">${p.num}</span>
+    <span class="ph-t">${p.type}</span>
+    <span class="ph-rel ${p.rc}">${p.r.toUpperCase()}</span>
+  </div>
+  <div class="pb">
+    <div class="cs" id="a${i}" style="border-left-color:${p.a.col}" onclick="pick(${i},'a')">
+      <div class="cs-f" style="color:${p.a.col}">${p.a.f}</div>
+      <div class="cs-t">"${p.a.l}"</div>
+      <div class="cs-c">— ${p.a.c}</div>
+    </div>
+    <div class="vsc">
+      <div class="vsdm"><span>VS</span></div>
+    </div>
+    <div class="cs" id="b${i}" style="border-left-color:${p.b.col}" onclick="pick(${i},'b')">
+      <div class="cs-f" style="color:${p.b.col}">${p.b.f}</div>
+      <div class="cs-t">"${p.b.l}"</div>
+      <div class="cs-c">— ${p.b.c}</div>
+    </div>
+  </div>
+  <div class="pd" id="pd${i}"></div>
+</div>`).join("");
+
+function pick(i,s){
+  if(sel){document.getElementById(sel).classList.remove("on");document.getElementById("pd"+parseInt(sel.slice(1))).classList.remove("on")}
+  const key=s+i;
+  if(sel===key){sel=null;return}
+  sel=key;
+  document.getElementById(key).classList.add("on");
+  const c=P[i][s];
+  const pd=document.getElementById("pd"+i);
+  pd.innerHTML=`<div class="pd-r"><span class="pd-k">CLAIM ID</span><span class="pd-v pd-id">${c.id}</span></div>
+    <div class="pd-r"><span class="pd-k">HOLDER</span><span class="pd-v">${c.c}</span></div>
+    <div class="pd-r"><span class="pd-k">TYPE</span><span class="pd-v">${c.t}</span></div>
+    <div class="pd-r"><span class="pd-k">TARGET</span><span class="pd-v">${c.tgt}</span></div>
+    <div class="pd-r"><span class="pd-k">EVIDENCE</span><span class="pd-v">${c.ev}</span></div>
+    <div class="pd-d">"${c.d}"</div>`;
+  pd.classList.add("on");
+}
+
+// ── SPARQL ─────────────────────────────────────────────────
+const SQ=[
+  {title:"CQ1 — Contradicting Pairs",
+   code:`<span class="sc"># All contradicting pairs · holders · types</span>
+<span class="sk">PREFIX</span> <span class="sp">:</span> &lt;http://www.semanticweb.org/skyrim/ontology#&gt;
+<span class="sk">PREFIX</span> <span class="sp">rdfs:</span> &lt;http://www.w3.org/2000/01/rdf-schema#&gt;
+
+<span class="sk">SELECT</span> <span class="sv">?labelA</span> <span class="sv">?holderA</span> <span class="sv">?typeA</span> <span class="sv">?labelB</span> <span class="sv">?holderB</span> <span class="sv">?typeB</span>
+<span class="sk">WHERE</span> {
+  <span class="sv">?claimA</span> <span class="sp">a :Claim</span> ;
+    <span class="sp">:contradicts</span> <span class="sv">?claimB</span> ;
+    <span class="sp">rdfs:label</span> <span class="sv">?labelA</span> ; <span class="sp">:hasClaimType</span> <span class="sv">?typeA</span> ;
+    <span class="sp">:hasClaimHolder</span> <span class="sv">?charA</span> .
+  <span class="sv">?claimB</span> <span class="sp">a :Claim</span> ;
+    <span class="sp">rdfs:label</span> <span class="sv">?labelB</span> ; <span class="sp">:hasClaimType</span> <span class="sv">?typeB</span> ;
+    <span class="sp">:hasClaimHolder</span> <span class="sv">?charB</span> .
+  <span class="sv">?charA</span> <span class="sp">rdfs:label</span> <span class="sv">?holderA</span> .
+  <span class="sv">?charB</span> <span class="sp">rdfs:label</span> <span class="sv">?holderB</span> .
+  <span class="sk">FILTER</span> (<span class="sk">STR</span>(<span class="sv">?claimA</span>) &lt; <span class="sk">STR</span>(<span class="sv">?claimB</span>))
+}
+<span class="sk">ORDER BY</span> <span class="sv">?typeA</span>`,
+   desc:"Extracts all logically contradicting claim pairs. FILTER prevents duplicates since :contradicts is owl:SymmetricProperty. Expected: 6 rows (the 6 contradicting pairs, excluding 2 disputes pairs).",
+   result:`labelA                      · holderA · typeA
+→ labelB                    · holderB · typeB
+─────────────────────────────────────────────────────
+Skyrim belongs to the Nords · Ulfric  · Territorial
+→ Skyrim is an Imperial...  · Tullius · Sovereignty
+Talos is the 9th Divine     · Ulfric  · Theological
+→ Talos worship is heresy   · Elenwen · Theo. Counter
+... (6 rows total)`},
+  {title:"CQ2 — Faction Conflicts",
+   code:`<span class="sc"># Faction conflict matrix — inferred from member claims</span>
+<span class="sk">SELECT</span> <span class="sv">?factionA</span> <span class="sv">?factionB</span>
+       (<span class="sk">COUNT</span>(<span class="sk">DISTINCT</span> <span class="sv">?claimA</span>) <span class="sk">AS</span> <span class="sv">?conflicts</span>)
+<span class="sk">WHERE</span> {
+  <span class="sv">?charA</span> <span class="sp">:memberOf</span> <span class="sv">?facA</span> ; <span class="sp">:framesAs</span> <span class="sv">?claimA</span> .
+  <span class="sv">?charB</span> <span class="sp">:memberOf</span> <span class="sv">?facB</span> ; <span class="sp">:framesAs</span> <span class="sv">?claimB</span> .
+  <span class="sv">?claimA</span> <span class="sp">:contradicts</span> <span class="sv">?claimB</span> .
+  <span class="sv">?facA</span> <span class="sp">rdfs:label</span> <span class="sv">?factionA</span> .
+  <span class="sv">?facB</span> <span class="sp">rdfs:label</span> <span class="sv">?factionB</span> .
+  <span class="sk">FILTER</span> (<span class="sv">?facA</span> != <span class="sv">?facB</span> &amp;&amp;
+    <span class="sk">STR</span>(<span class="sv">?facA</span>) &lt; <span class="sk">STR</span>(<span class="sv">?facB</span>))
+}
+<span class="sk">GROUP BY</span> <span class="sv">?factionA</span> <span class="sv">?factionB</span>
+<span class="sk">ORDER BY</span> <span class="sk">DESC</span>(<span class="sv">?conflicts</span>)`,
+   desc:"Infers faction-level conflict by traversing the member → framesAs → contradicts chain. No direct faction-vs-faction property exists — this is entirely emergent from the data.",
+   result:`factionA       | factionB        | conflicts
+───────────────┼─────────────────┼──────────
+Stormcloaks    | Thalmor         | 3
+Imperial Legion| Stormcloaks     | 1
+Blades         | Greybeards      | 1
+Dawnguard      | Volkihar Clan   | 1`},
+  {title:"CQ3 — Contested Evidence",
+   code:`<span class="sc"># Evidence cited by directly opposing claims</span>
+<span class="sk">SELECT</span> <span class="sv">?evLabel</span>
+  (<span class="sk">COUNT</span>(<span class="sk">DISTINCT</span> <span class="sv">?claim</span>) <span class="sk">AS</span> <span class="sv">?citedBy</span>)
+  (<span class="sk">GROUP_CONCAT</span>(<span class="sk">DISTINCT</span> <span class="sv">?claimLabel</span>;
+    separator=<span class="ss">" | "</span>) <span class="sk">AS</span> <span class="sv">?claims</span>)
+<span class="sk">WHERE</span> {
+  <span class="sv">?claim</span> <span class="sp">a :Claim</span> ;
+    <span class="sp">:hasEvidence</span> <span class="sv">?ev</span> ;
+    <span class="sp">:contradicts</span> <span class="sv">?opposing</span> ;
+    <span class="sp">rdfs:label</span> <span class="sv">?claimLabel</span> .
+  <span class="sv">?opposing</span> <span class="sp">:hasEvidence</span> <span class="sv">?ev</span> .
+  <span class="sv">?ev</span> <span class="sp">rdfs:label</span> <span class="sv">?evLabel</span> .
+}
+<span class="sk">GROUP BY</span> <span class="sv">?evLabel</span>
+<span class="sk">ORDER BY</span> <span class="sk">DESC</span>(<span class="sv">?citedBy</span>)`,
+   desc:"Finds artifacts cited by opposing claims simultaneously. The same object grounds two contradictory assertions — contested evidence rather than contested facts.",
+   result:`evLabel       | citedBy | claims
+──────────────┼─────────┼────────────────────────────
+Auriel's Bow  | 2       | CLM-A008 | CLM-B008
+Elder Scroll  | 2       | CLM-A006 | CLM-B006`},
+  {title:"CQ4 — Neutrality",
+   code:`<span class="sc"># Characters with no framesAs — neutrality detection</span>
+<span class="sk">SELECT</span> <span class="sv">?charLabel</span> <span class="sv">?role</span>
+<span class="sk">WHERE</span> {
+  <span class="sv">?char</span> <span class="sp">a :Character</span> ;
+    <span class="sp">rdfs:label</span> <span class="sv">?charLabel</span> ;
+    <span class="sp">:hasRole</span> <span class="sv">?role</span> .
+  <span class="sk">FILTER NOT EXISTS</span> {
+    <span class="sv">?char</span> <span class="sp">:framesAs</span> <span class="sv">?anyClaim</span>
+  }
+}`,
+   desc:"Uses FILTER NOT EXISTS to detect characters for whom no framesAs exists. Absence of an assertion is the data. Balgruuf's neutrality is not described — it is structurally encoded.",
+   result:`charLabel                 | role
+──────────────────────────┼─────────────────────
+Jarl Balgruuf the Greater | Jarl of Whiterun
+
+(exactly 1 result — by design)`},
+  {title:"CQ5 — Denial Chains",
+   code:`<span class="sc"># Directional denial — who actively repudiates whom</span>
+<span class="sk">SELECT</span> <span class="sv">?denierLabel</span>
+       <span class="sv">?deniedLabel</span>
+       <span class="sv">?deniedHolderLabel</span>
+<span class="sk">WHERE</span> {
+  <span class="sv">?denier</span> <span class="sp">:framesAs</span> <span class="sv">?claim</span> .
+  <span class="sv">?claim</span> <span class="sp">:denies</span> <span class="sv">?denied</span> .
+  <span class="sv">?denied</span> <span class="sp">:hasClaimHolder</span> <span class="sv">?dh</span> .
+  <span class="sv">?denier</span> <span class="sp">rdfs:label</span> <span class="sv">?denierLabel</span> .
+  <span class="sv">?denied</span> <span class="sp">rdfs:label</span> <span class="sv">?deniedLabel</span> .
+  <span class="sv">?dh</span> <span class="sp">rdfs:label</span> <span class="sv">?deniedHolderLabel</span> .
+}`,
+   desc:"Traverses the directional :denies relation. Unlike :contradicts (symmetric), :denies is one-way — encoding active propaganda. Only the Talos pair uses it, and both sides use it.",
+   result:`denier           | denied claim               | holder
+─────────────────┼────────────────────────────┼─────────
+Ulfric Stormcloak| Talos was mortal — heresy   | Elenwen
+Elenwen          | Talos is the 9th Divine     | Ulfric
+
+(2 rows — unique bidirectional denial pair)`}
+];
+
+function showTab(i){
+  document.querySelectorAll(".ct").forEach((t,j)=>t.classList.toggle("on",j===i));
+  document.querySelectorAll(".cp").forEach((p,j)=>p.classList.toggle("on",j===i));
+  const el=document.getElementById("sq"+i);
+  if(!el.dataset.r){
+    const q=SQ[i];
+    el.innerHTML=`<pre class="sq">${q.code}</pre>
+      <div class="sqd">${q.desc}</div>
+      <div class="sqr"><span class="sqr-l">EXPECTED RESULT</span>${q.result}</div>`;
+    el.dataset.r="1";
+  }
+}
+showTab(0);
+
+// ── Discovered notification ─────────────────────────────────
+const disc=document.getElementById("disc");
+const sections=["overview","framework","ontology","network","sparql","insights","team"];
+const labels={"overview":"THE WORLD","framework":"CONFLICT LAWS","ontology":"THE TOME","network":"WAR TABLE","sparql":"THE CODEX","insights":"DISCOVERIES","team":"THE SCRIBES"};
+let shown=new Set();
+const io=new IntersectionObserver(e=>{
+  e.forEach(x=>{
+    if(x.isIntersecting&&x.intersectionRatio>.4&&!shown.has(x.target.id)){
+      shown.add(x.target.id);
+      if(labels[x.target.id]){
+        disc.textContent="&#9670; \xa0 "+labels[x.target.id];
+        disc.innerHTML="&#9670; &nbsp; DISCOVERED: "+labels[x.target.id];
+        disc.classList.add("show");
+        setTimeout(()=>disc.classList.remove("show"),2400);
+      }
+    }
+  });
+},{threshold:.4});
+sections.forEach(id=>{const el=document.getElementById(id);if(el)io.observe(el)});
+
+// ── Scroll reveal ───────────────────────────────────────────
+const ro=new IntersectionObserver(e=>e.forEach(x=>{if(x.isIntersecting)x.target.classList.add("vis")}),{threshold:.1});
+document.querySelectorAll(".rev").forEach(el=>ro.observe(el));
+</script>
+</body>
+</html>

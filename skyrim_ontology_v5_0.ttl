@@ -1,0 +1,843 @@
+@prefix : <http://www.semanticweb.org/skyrim/ontology#> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix dc: <http://purl.org/dc/elements/1.1/> .
+@prefix schema: <https://schema.org/> .
+@prefix foaf: <http://xmlns.com/foaf/0.1/> .
+@prefix prov: <http://www.w3.org/ns/prov#> .
+@prefix skos: <http://www.w3.org/2004/02/skos/core#> .
+@base <http://www.semanticweb.org/skyrim/ontology#> .
+
+<http://www.semanticweb.org/skyrim/ontology> rdf:type owl:Ontology ;
+    dc:title "Claims of Tamriel" ;
+    dc:creator "Atakan Kayi" ;
+    dc:description "An OWL ontology modelling conflicting claims, perspectives, and narratives within the Elder Scrolls V: Skyrim universe. v5.0 adds OWL restrictions, disjoint classes, property characteristics, a property chain axiom, FOAF/PROV-O/Schema.org alignment, and a SKOS ClaimType concept scheme." ;
+    owl:versionInfo "5.0" .
+
+#################################################################
+# Annotation Properties
+#################################################################
+
+dc:title rdf:type owl:AnnotationProperty .
+dc:creator rdf:type owl:AnnotationProperty .
+dc:description rdf:type owl:AnnotationProperty .
+schema:url rdf:type owl:AnnotationProperty .
+foaf:name rdf:type owl:AnnotationProperty .
+skos:prefLabel rdf:type owl:AnnotationProperty .
+skos:definition rdf:type owl:AnnotationProperty .
+skos:broader rdf:type owl:AnnotationProperty .
+skos:narrower rdf:type owl:AnnotationProperty .
+skos:inScheme rdf:type owl:AnnotationProperty .
+skos:related rdf:type owl:AnnotationProperty .
+
+#################################################################
+# Classes
+#################################################################
+
+:City rdf:type owl:Class ;
+    rdfs:subClassOf schema:Place ;
+    rdfs:label "City" ;
+    rdfs:comment "A major settlement or hold capital in Skyrim. Aligned with schema:Place." .
+
+:Race rdf:type owl:Class ;
+    rdfs:label "Race" ;
+    rdfs:comment "A playable race or notable creature type in the Elder Scrolls universe." .
+
+:Character rdf:type owl:Class ;
+    rdfs:subClassOf foaf:Person ;
+    rdfs:subClassOf [
+        rdf:type owl:Restriction ;
+        owl:onProperty :belongsToRace ;
+        owl:minQualifiedCardinality "1"^^xsd:nonNegativeInteger ;
+        owl:onClass :Race
+    ] ;
+    rdfs:label "Character" ;
+    rdfs:comment "A named NPC or protagonist. Aligned with foaf:Person. Each Character belongs to at least one Race (owl:minQualifiedCardinality 1) and may belong to multiple races to support mixed heritage." .
+
+:Item rdf:type owl:Class ;
+    rdfs:label "Item" ;
+    rdfs:comment "A significant artifact whose ownership, meaning, or legitimacy is contested." .
+
+:Faction rdf:type owl:Class ;
+    rdfs:subClassOf foaf:Group ;
+    rdfs:label "Faction" ;
+    rdfs:comment "A political, military, religious, or social group. Aligned with foaf:Group." .
+
+:ClaimType rdf:type owl:Class ;
+    rdfs:label "Claim Type" ;
+    rdfs:comment "A controlled vocabulary category for classifying claims." .
+
+:Claim rdf:type owl:Class ;
+    rdfs:subClassOf prov:Entity ;
+    rdfs:subClassOf [
+        rdf:type owl:Restriction ;
+        owl:onProperty :hasClaimHolder ;
+        owl:someValuesFrom :Character
+    ] ;
+    rdfs:subClassOf [
+        rdf:type owl:Restriction ;
+        owl:onProperty :hasClaimTypeIRI ;
+        owl:qualifiedCardinality "1"^^xsd:nonNegativeInteger ;
+        owl:onClass :ClaimType
+    ] ;
+    rdfs:subClassOf [
+        rdf:type owl:Restriction ;
+        owl:onProperty :hasDescription ;
+        owl:someValuesFrom xsd:string
+    ] ;
+    rdfs:label "Claim" ;
+    rdfs:comment "A reified proposition aligned with prov:Entity. Restrictions enforce: every Claim has (1) at least one Character holder, (2) exactly one ClaimType, (3) a description string." .
+
+#################################################################
+# Disjoint Classes
+#################################################################
+
+[] rdf:type owl:AllDisjointClasses ;
+    owl:members ( :Character :Faction :City :Race :Item :Claim :ClaimType ) .
+
+#################################################################
+# Object Properties
+#################################################################
+
+:belongsToRace rdf:type owl:ObjectProperty ;
+    rdfs:domain :Character ;
+    rdfs:range :Race ;
+    rdfs:label "belongs to race" .
+
+:memberOf rdf:type owl:ObjectProperty ;
+    rdfs:domain :Character ;
+    rdfs:range :Faction ;
+    rdfs:label "member of" .
+
+:hasClaimHolder rdf:type owl:ObjectProperty ;
+    rdfs:subPropertyOf prov:wasAttributedTo ;
+    rdfs:domain :Claim ;
+    rdfs:range :Character ;
+    rdfs:label "has claim holder" ;
+    rdfs:comment "Sub-property of prov:wasAttributedTo: a claim is attributed to its holder." .
+
+:hasClaimTypeIRI rdf:type owl:ObjectProperty , owl:FunctionalProperty ;
+    rdfs:domain :Claim ;
+    rdfs:range :ClaimType ;
+    rdfs:label "has claim type IRI" ;
+    rdfs:comment "owl:FunctionalProperty: each Claim has exactly one ClaimType." .
+
+:framesAs rdf:type owl:ObjectProperty ;
+    rdfs:domain :Character ;
+    rdfs:range :Claim ;
+    owl:inverseOf :isFramedBy ;
+    rdfs:label "frames as" .
+
+:isFramedBy rdf:type owl:ObjectProperty ;
+    rdfs:domain :Claim ;
+    rdfs:range :Character ;
+    owl:inverseOf :framesAs ;
+    rdfs:label "is framed by" .
+
+:contradicts rdf:type owl:ObjectProperty , owl:SymmetricProperty ;
+    rdfs:domain :Claim ;
+    rdfs:range :Claim ;
+    rdfs:label "contradicts" ;
+    rdfs:comment "Symmetric. Logical opposition: if A contradicts B then B contradicts A." .
+
+:denies rdf:type owl:ObjectProperty , owl:IrreflexiveProperty ;
+    rdfs:domain :Claim ;
+    rdfs:range :Claim ;
+    rdfs:label "denies" ;
+    rdfs:comment "Directional. owl:IrreflexiveProperty: a claim cannot deny itself." .
+
+:disputes rdf:type owl:ObjectProperty , owl:SymmetricProperty ;
+    rdfs:domain :Claim ;
+    rdfs:range :Claim ;
+    rdfs:label "disputes" ;
+    rdfs:comment "Symmetric. Interpretive difference without strict logical contradiction." .
+
+:relatesTo rdf:type owl:ObjectProperty ;
+    rdfs:label "relates to" .
+
+:hasTarget rdf:type owl:ObjectProperty ;
+    rdfs:domain :Claim ;
+    rdfs:range owl:Thing ;
+    rdfs:label "has target" .
+
+:hasEvidence rdf:type owl:ObjectProperty ;
+    rdfs:domain :Claim ;
+    rdfs:range owl:Thing ;
+    rdfs:label "has evidence" .
+
+:hasSource rdf:type owl:ObjectProperty ;
+    rdfs:domain :Claim ;
+    rdfs:range :Faction ;
+    rdfs:label "has source" ;
+    rdfs:comment "Links a Claim to the Faction that collectively backs or endorses it. Distinct from :sourceURL (data property for external web links) and :hasClaimHolder (individual Character who holds the claim)." .
+
+:hasOpposingHolder rdf:type owl:ObjectProperty ;
+    rdfs:domain :Claim ;
+    rdfs:range :Character ;
+    rdfs:label "has opposing holder" ;
+    rdfs:comment "Inferred via property chain: :contradicts o :hasClaimHolder. Links a claim to the holder of any claim it contradicts. No direct assertions needed — the reasoner derives this automatically." ;
+    owl:propertyChainAxiom ( :contradicts :hasClaimHolder ) .
+
+#################################################################
+# Data Properties
+#################################################################
+
+:hasID rdf:type owl:DatatypeProperty ;
+    rdfs:range xsd:string ;
+    rdfs:label "has ID" .
+
+:hasRole rdf:type owl:DatatypeProperty ;
+    rdfs:range xsd:string ;
+    rdfs:label "has role" .
+
+:hasLocation rdf:type owl:DatatypeProperty ;
+    rdfs:range xsd:string ;
+    rdfs:label "has location" .
+
+:hasAffiliationLabel rdf:type owl:DatatypeProperty ;
+    rdfs:range xsd:string ;
+    rdfs:label "has affiliation label" .
+
+:hasTrait rdf:type owl:DatatypeProperty ;
+    rdfs:range xsd:string ;
+    rdfs:label "has trait" .
+
+:hasDescription rdf:type owl:DatatypeProperty ;
+    rdfs:domain :Claim ;
+    rdfs:range xsd:string ;
+    rdfs:label "has description" .
+
+:hasClaimType rdf:type owl:DatatypeProperty ;
+    rdfs:domain :Claim ;
+    rdfs:range xsd:string ;
+    rdfs:label "has claim type" .
+
+:sourceURL rdf:type owl:DatatypeProperty ;
+    rdfs:range xsd:anyURI ;
+    rdfs:label "source URL" .
+
+:hasEvidenceStrength rdf:type owl:DatatypeProperty ;
+    rdfs:domain :Claim ;
+    rdfs:range xsd:decimal ;
+    rdfs:label "has evidence strength" ;
+    rdfs:comment "0.0-1.0 score representing relative strength of evidence supporting this claim." .
+
+#################################################################
+# SKOS Concept Scheme
+#################################################################
+
+:ClaimTypeScheme rdf:type skos:ConceptScheme ;
+    skos:prefLabel "Claims of Tamriel ClaimType Vocabulary"@en ;
+    rdfs:comment "SKOS concept scheme organizing 11 ClaimType individuals. Counter-claim types are skos:narrower than their primary counterparts." .
+
+#################################################################
+# ClaimType Individuals (with SKOS)
+#################################################################
+
+:TerritorialClaim rdf:type owl:NamedIndividual , :ClaimType ;
+    rdfs:label "Territorial Claim" ;
+    skos:inScheme :ClaimTypeScheme ;
+    skos:prefLabel "Territorial Claim"@en ;
+    skos:narrower :SovereigntyClaim ;
+    rdfs:comment "A claim over land, territory, or settlement." .
+
+:SovereigntyClaim rdf:type owl:NamedIndividual , :ClaimType ;
+    rdfs:label "Sovereignty Claim" ;
+    skos:inScheme :ClaimTypeScheme ;
+    skos:prefLabel "Sovereignty Claim"@en ;
+    skos:broader :TerritorialClaim ;
+    rdfs:comment "Legitimate political governance over a region. Narrower than TerritorialClaim." .
+
+:TheologicalClaim rdf:type owl:NamedIndividual , :ClaimType ;
+    rdfs:label "Theological Claim" ;
+    skos:inScheme :ClaimTypeScheme ;
+    skos:prefLabel "Theological Claim"@en ;
+    skos:narrower :TheologicalCounterClaim ;
+    skos:narrower :TheologicalMoralClaim ;
+    rdfs:comment "Divine status or religious legitimacy." .
+
+:TheologicalCounterClaim rdf:type owl:NamedIndividual , :ClaimType ;
+    rdfs:label "Theological Counter-Claim" ;
+    skos:inScheme :ClaimTypeScheme ;
+    skos:prefLabel "Theological Counter-Claim"@en ;
+    skos:broader :TheologicalClaim ;
+    rdfs:comment "Denies the theological legitimacy of a corresponding Theological Claim." .
+
+:PoliticalClaim rdf:type owl:NamedIndividual , :ClaimType ;
+    rdfs:label "Political Claim" ;
+    skos:inScheme :ClaimTypeScheme ;
+    skos:prefLabel "Political Claim"@en ;
+    skos:narrower :PoliticalCounterClaim ;
+    rdfs:comment "Political motivation or actor legitimacy." .
+
+:PoliticalCounterClaim rdf:type owl:NamedIndividual , :ClaimType ;
+    rdfs:label "Political Counter-Claim" ;
+    skos:inScheme :ClaimTypeScheme ;
+    skos:prefLabel "Political Counter-Claim"@en ;
+    skos:broader :PoliticalClaim ;
+    rdfs:comment "Contests a political actor's stated motivations." .
+
+:MoralClaim rdf:type owl:NamedIndividual , :ClaimType ;
+    rdfs:label "Moral Claim" ;
+    skos:inScheme :ClaimTypeScheme ;
+    skos:prefLabel "Moral Claim"@en ;
+    skos:narrower :MoralCounterClaim ;
+    rdfs:comment "Normative claim about justice, punishment, or redemption." .
+
+:MoralCounterClaim rdf:type owl:NamedIndividual , :ClaimType ;
+    rdfs:label "Moral Counter-Claim" ;
+    skos:inScheme :ClaimTypeScheme ;
+    skos:prefLabel "Moral Counter-Claim"@en ;
+    skos:broader :MoralClaim ;
+    rdfs:comment "Rejects or complicates a Moral Claim." .
+
+:CosmologicalClaim rdf:type owl:NamedIndividual , :ClaimType ;
+    rdfs:label "Cosmological Claim" ;
+    skos:inScheme :ClaimTypeScheme ;
+    skos:prefLabel "Cosmological Claim"@en ;
+    skos:narrower :CosmologicalCounterClaim ;
+    rdfs:comment "Nature or fate of cosmic forces." .
+
+:CosmologicalCounterClaim rdf:type owl:NamedIndividual , :ClaimType ;
+    rdfs:label "Cosmological Counter-Claim" ;
+    skos:inScheme :ClaimTypeScheme ;
+    skos:prefLabel "Cosmological Counter-Claim"@en ;
+    skos:broader :CosmologicalClaim ;
+    rdfs:comment "Rejects or reframes a cosmological assertion." .
+
+:TheologicalMoralClaim rdf:type owl:NamedIndividual , :ClaimType ;
+    rdfs:label "Theological-Moral Claim" ;
+    skos:inScheme :ClaimTypeScheme ;
+    skos:prefLabel "Theological-Moral Claim"@en ;
+    skos:broader :TheologicalClaim ;
+    skos:related :MoralClaim ;
+    rdfs:comment "Blends theological framing with moral judgment. skos:related to MoralClaim." .
+
+:SupremacistClaim rdf:type owl:NamedIndividual , :ClaimType ;
+    rdfs:label "Supremacist Claim" ;
+    skos:inScheme :ClaimTypeScheme ;
+    skos:prefLabel "Supremacist Claim"@en ;
+    rdfs:comment "Inherent dominance or superiority of one group." .
+
+#################################################################
+# Faction Individuals
+#################################################################
+
+:Stormcloaks rdf:type owl:NamedIndividual , :Faction ;
+    rdfs:label "Stormcloaks" ;
+    :hasID "FAC-001" ;
+    foaf:name "Stormcloaks" ;
+    :sourceURL "https://en.uesp.net/wiki/Skyrim:Stormcloaks"^^xsd:anyURI .
+
+:Imperial_Legion rdf:type owl:NamedIndividual , :Faction ;
+    rdfs:label "Imperial Legion" ;
+    :hasID "FAC-002" ;
+    foaf:name "Imperial Legion" ;
+    :sourceURL "https://en.uesp.net/wiki/Skyrim:Imperial_Legion"^^xsd:anyURI .
+
+:Thalmor rdf:type owl:NamedIndividual , :Faction ;
+    rdfs:label "Thalmor" ;
+    :hasID "FAC-003" ;
+    foaf:name "Thalmor" ;
+    :sourceURL "https://en.uesp.net/wiki/Skyrim:Thalmor"^^xsd:anyURI .
+
+:Blades_Faction rdf:type owl:NamedIndividual , :Faction ;
+    rdfs:label "Blades" ;
+    :hasID "FAC-004" ;
+    foaf:name "Blades" ;
+    :sourceURL "https://en.uesp.net/wiki/Skyrim:Blades"^^xsd:anyURI .
+
+:Greybeards_Faction rdf:type owl:NamedIndividual , :Faction ;
+    rdfs:label "Greybeards" ;
+    :hasID "FAC-005" ;
+    foaf:name "Greybeards" ;
+    :sourceURL "https://en.uesp.net/wiki/Skyrim:Greybeards"^^xsd:anyURI .
+
+:Forsworn_Faction rdf:type owl:NamedIndividual , :Faction ;
+    rdfs:label "Forsworn" ;
+    :hasID "FAC-006" ;
+    foaf:name "Forsworn" ;
+    :sourceURL "https://en.uesp.net/wiki/Skyrim:Forsworn"^^xsd:anyURI .
+
+:Volkihar_Clan rdf:type owl:NamedIndividual , :Faction ;
+    rdfs:label "Volkihar Vampire Clan" ;
+    :hasID "FAC-007" ;
+    foaf:name "Volkihar Vampire Clan" ;
+    :sourceURL "https://en.uesp.net/wiki/Skyrim:Volkihar_Clan"^^xsd:anyURI .
+
+:Dawnguard_Faction rdf:type owl:NamedIndividual , :Faction ;
+    rdfs:label "Dawnguard" ;
+    :hasID "FAC-008" ;
+    foaf:name "Dawnguard" ;
+    :sourceURL "https://en.uesp.net/wiki/Skyrim:Dawnguard_(faction)"^^xsd:anyURI .
+
+#################################################################
+# Evidence & Item Individuals
+#################################################################
+
+:Thalmor_Dossier_Ulfric rdf:type owl:NamedIndividual ;
+    rdfs:label "Thalmor Dossier on Ulfric" ;
+    :sourceURL "https://en.uesp.net/wiki/Skyrim:Dossier:_Ulfric_Stormcloak"^^xsd:anyURI .
+
+:Dragonrend_Shout rdf:type owl:NamedIndividual ;
+    rdfs:label "Dragonrend Shout" ;
+    :sourceURL "https://en.uesp.net/wiki/Skyrim:Dragonrend"^^xsd:anyURI .
+
+:Talos_Tradition rdf:type owl:NamedIndividual ;
+    rdfs:label "Talos Tradition" ;
+    :sourceURL "https://en.uesp.net/wiki/Lore:Talos"^^xsd:anyURI .
+
+:White_Gold_Concordat rdf:type owl:NamedIndividual ;
+    rdfs:label "White-Gold Concordat" ;
+    :sourceURL "https://en.uesp.net/wiki/Lore:White-Gold_Concordat"^^xsd:anyURI .
+
+:Kodlak_Testament rdf:type owl:NamedIndividual ;
+    rdfs:label "Kodlak's Testament" ;
+    :sourceURL "https://en.uesp.net/wiki/Skyrim:Kodlak_Whitemane"^^xsd:anyURI .
+
+:Forsworn_Uprising_History rdf:type owl:NamedIndividual ;
+    rdfs:label "Forsworn Uprising History" ;
+    :sourceURL "https://en.uesp.net/wiki/Skyrim:The_Forsworn_Conspiracy"^^xsd:anyURI .
+
+:Auriels_Bow rdf:type owl:NamedIndividual , :Item ;
+    rdfs:label "Auriel's Bow" ;
+    :hasID "ITM-003" ;
+    :sourceURL "https://en.uesp.net/wiki/Skyrim:Auriel%27s_Bow"^^xsd:anyURI .
+
+:Elder_Scroll rdf:type owl:NamedIndividual , :Item ;
+    rdfs:label "Elder Scroll" ;
+    :hasID "ITM-001" ;
+    :hasRole "Cosmic Artifact" ;
+    :hasLocation "Tower of Mzark, Blackreach" ;
+    :sourceURL "https://en.uesp.net/wiki/Skyrim:Elder_Scroll_(Dragon)"^^xsd:anyURI .
+
+:Jagged_Crown rdf:type owl:NamedIndividual , :Item ;
+    rdfs:label "Jagged Crown" ;
+    :hasID "ITM-002" ;
+    :hasRole "Symbol of Kingship" ;
+    :hasLocation "Korvanjund" ;
+    :sourceURL "https://en.uesp.net/wiki/Skyrim:Jagged_Crown"^^xsd:anyURI ;
+    :relatesTo :CLM_A001 ;
+    :relatesTo :CLM_B001 .
+
+#################################################################
+# City Individuals
+#################################################################
+
+:Solitude rdf:type owl:NamedIndividual , :City ;
+    rdfs:label "Solitude" ;
+    :hasID "LOC-001" ;
+    :hasRole "Imperial Capital" ;
+    :hasLocation "Haafingar Hold" ;
+    :sourceURL "https://en.uesp.net/wiki/Skyrim:Solitude"^^xsd:anyURI .
+
+:Windhelm rdf:type owl:NamedIndividual , :City ;
+    rdfs:label "Windhelm" ;
+    :hasID "LOC-002" ;
+    :hasRole "Stormcloak Capital" ;
+    :hasLocation "Eastmarch Hold" ;
+    :sourceURL "https://en.uesp.net/wiki/Skyrim:Windhelm"^^xsd:anyURI .
+
+:Whiterun rdf:type owl:NamedIndividual , :City ;
+    rdfs:label "Whiterun" ;
+    :hasID "LOC-003" ;
+    :hasRole "Trade Hub" ;
+    :hasLocation "Whiterun Hold" ;
+    :sourceURL "https://en.uesp.net/wiki/Skyrim:Whiterun"^^xsd:anyURI .
+
+:Markarth rdf:type owl:NamedIndividual , :City ;
+    rdfs:label "Markarth" ;
+    :hasID "LOC-004" ;
+    :hasRole "Dwemer Stone City" ;
+    :hasLocation "The Reach" ;
+    :sourceURL "https://en.uesp.net/wiki/Skyrim:Markarth"^^xsd:anyURI .
+
+:Riften rdf:type owl:NamedIndividual , :City ;
+    rdfs:label "Riften" ;
+    :hasID "LOC-005" ;
+    :hasRole "Corrupt City" ;
+    :hasLocation "The Rift" ;
+    :sourceURL "https://en.uesp.net/wiki/Skyrim:Riften"^^xsd:anyURI .
+
+:Winterhold rdf:type owl:NamedIndividual , :City ;
+    rdfs:label "Winterhold" ;
+    :hasID "LOC-006" ;
+    :hasRole "Ruined Town" ;
+    :hasLocation "Winterhold Hold" ;
+    :sourceURL "https://en.uesp.net/wiki/Skyrim:Winterhold_(city)"^^xsd:anyURI .
+
+#################################################################
+# Race Individuals
+#################################################################
+
+:Nord rdf:type owl:NamedIndividual , :Race ;
+    rdfs:label "Nord" ; :hasID "RAC-001" ;
+    :sourceURL "https://en.uesp.net/wiki/Skyrim:Nord"^^xsd:anyURI .
+
+:Dunmer rdf:type owl:NamedIndividual , :Race ;
+    rdfs:label "Dunmer (Dark Elf)" ; :hasID "RAC-002" ;
+    :sourceURL "https://en.uesp.net/wiki/Skyrim:Dark_Elf"^^xsd:anyURI .
+
+:Khajiit rdf:type owl:NamedIndividual , :Race ;
+    rdfs:label "Khajiit" ; :hasID "RAC-003" ;
+    :sourceURL "https://en.uesp.net/wiki/Skyrim:Khajiit"^^xsd:anyURI .
+
+:Dragon_Dov rdf:type owl:NamedIndividual , :Race ;
+    rdfs:label "Dragon (Dov)" ; :hasID "RAC-004" ;
+    :sourceURL "https://en.uesp.net/wiki/Lore:Dragon"^^xsd:anyURI .
+
+:Vampire rdf:type owl:NamedIndividual , :Race ;
+    rdfs:label "Vampire" ; :hasID "RAC-005" ;
+    :sourceURL "https://en.uesp.net/wiki/Skyrim:Vampire"^^xsd:anyURI .
+
+:Werewolf rdf:type owl:NamedIndividual , :Race ;
+    rdfs:label "Werewolf" ; :hasID "RAC-006" ;
+    :sourceURL "https://en.uesp.net/wiki/Skyrim:Werewolf"^^xsd:anyURI .
+
+:Dwemer rdf:type owl:NamedIndividual , :Race ;
+    rdfs:label "Dwemer (Dwarves)" ; :hasID "RAC-007" ;
+    :sourceURL "https://en.uesp.net/wiki/Lore:Dwemer"^^xsd:anyURI .
+
+:Breton rdf:type owl:NamedIndividual , :Race ;
+    rdfs:label "Breton" ; :hasID "RAC-008" ;
+    :sourceURL "https://en.uesp.net/wiki/Skyrim:Breton"^^xsd:anyURI .
+
+:Altmer rdf:type owl:NamedIndividual , :Race ;
+    rdfs:label "Altmer (High Elf)" ; :hasID "RAC-009" ;
+    :sourceURL "https://en.uesp.net/wiki/Skyrim:High_Elf"^^xsd:anyURI .
+
+:Imperial rdf:type owl:NamedIndividual , :Race ;
+    rdfs:label "Imperial" ; :hasID "RAC-010" ;
+    :sourceURL "https://en.uesp.net/wiki/Skyrim:Imperial"^^xsd:anyURI .
+
+#################################################################
+# Character Individuals
+#################################################################
+
+:Dragonborn rdf:type owl:NamedIndividual , :Character ;
+    rdfs:label "Dragonborn (Dovahkiin)" ;
+    :hasID "CHR-001" ; :hasRole "Protagonist / Dovahkiin" ;
+    :belongsToRace :Nord ;
+    foaf:name "Dovahkiin" ;
+    :sourceURL "https://en.uesp.net/wiki/Skyrim:Dragonborn_(NPC)"^^xsd:anyURI ;
+    :framesAs :CLM_B005 ; :framesAs :CLM_B006 ; :framesAs :CLM_B008 .
+
+:Alduin rdf:type owl:NamedIndividual , :Character ;
+    rdfs:label "Alduin" ;
+    :hasID "CHR-002" ; :hasRole "World-Eater Dragon" ;
+    :belongsToRace :Dragon_Dov ;
+    foaf:name "Alduin" ;
+    :sourceURL "https://en.uesp.net/wiki/Skyrim:Alduin"^^xsd:anyURI ;
+    :framesAs :CLM_A006 .
+
+:Paarthurnax rdf:type owl:NamedIndividual , :Character ;
+    rdfs:label "Paarthurnax" ;
+    :hasID "CHR-003" ; :hasRole "Elder Dragon / Greybeard Master" ;
+    :belongsToRace :Dragon_Dov ; :memberOf :Greybeards_Faction ;
+    foaf:name "Paarthurnax" ;
+    :sourceURL "https://en.uesp.net/wiki/Skyrim:Paarthurnax"^^xsd:anyURI ;
+    :framesAs :CLM_B004 .
+
+:Ulfric_Stormcloak rdf:type owl:NamedIndividual , :Character ;
+    rdfs:label "Ulfric Stormcloak" ;
+    :hasID "CHR-004" ; :hasRole "Jarl of Windhelm / Rebel Leader" ;
+    :belongsToRace :Nord ; :memberOf :Stormcloaks ;
+    foaf:name "Ulfric Stormcloak" ;
+    :sourceURL "https://en.uesp.net/wiki/Skyrim:Ulfric_Stormcloak"^^xsd:anyURI ;
+    :framesAs :CLM_A001 ; :framesAs :CLM_A002 ; :framesAs :CLM_A003 .
+
+:General_Tullius rdf:type owl:NamedIndividual , :Character ;
+    rdfs:label "General Tullius" ;
+    :hasID "CHR-005" ; :hasRole "Imperial Military Governor" ;
+    :belongsToRace :Imperial ; :memberOf :Imperial_Legion ;
+    foaf:name "General Tullius" ;
+    :sourceURL "https://en.uesp.net/wiki/Skyrim:General_Tullius"^^xsd:anyURI ;
+    :framesAs :CLM_B001 ; :framesAs :CLM_B007 .
+
+:Elenwen rdf:type owl:NamedIndividual , :Character ;
+    rdfs:label "Elenwen" ;
+    :hasID "CHR-006" ; :hasRole "Thalmor First Emissary" ;
+    :belongsToRace :Altmer ; :memberOf :Thalmor ;
+    foaf:name "Elenwen" ;
+    :sourceURL "https://en.uesp.net/wiki/Skyrim:Elenwen"^^xsd:anyURI ;
+    :framesAs :CLM_B002 ; :framesAs :CLM_B003 .
+
+:Jarl_Balgruuf rdf:type owl:NamedIndividual , :Character ;
+    rdfs:label "Jarl Balgruuf the Greater" ;
+    :hasID "CHR-007" ; :hasRole "Jarl of Whiterun" ;
+    :belongsToRace :Nord ;
+    foaf:name "Balgruuf the Greater" ;
+    :sourceURL "https://en.uesp.net/wiki/Skyrim:Balgruuf_the_Greater"^^xsd:anyURI ;
+    rdfs:comment "No framesAs assertions — neutrality encoded as structured absence. FILTER NOT EXISTS returns only this character." .
+
+:Madanach rdf:type owl:NamedIndividual , :Character ;
+    rdfs:label "Madanach" ;
+    :hasID "CHR-008" ; :hasRole "King in Rags / Forsworn Leader" ;
+    :belongsToRace :Breton ; :memberOf :Forsworn_Faction ;
+    foaf:name "Madanach" ;
+    :sourceURL "https://en.uesp.net/wiki/Skyrim:Madanach"^^xsd:anyURI ;
+    :framesAs :CLM_A007 .
+
+:Harkon rdf:type owl:NamedIndividual , :Character ;
+    rdfs:label "Lord Harkon" ;
+    :hasID "CHR-009" ; :hasRole "Vampire Lord" ;
+    :belongsToRace :Vampire ; :memberOf :Volkihar_Clan ;
+    foaf:name "Lord Harkon" ;
+    :sourceURL "https://en.uesp.net/wiki/Skyrim:Lord_Harkon"^^xsd:anyURI ;
+    :framesAs :CLM_A008 .
+
+:Delphine rdf:type owl:NamedIndividual , :Character ;
+    rdfs:label "Delphine" ;
+    :hasID "CHR-010" ; :hasRole "Last Active Blade" ;
+    :belongsToRace :Breton ; :memberOf :Blades_Faction ;
+    foaf:name "Delphine" ;
+    :sourceURL "https://en.uesp.net/wiki/Skyrim:Delphine"^^xsd:anyURI ;
+    :framesAs :CLM_A004 .
+
+:Hircine rdf:type owl:NamedIndividual , :Character ;
+    rdfs:label "Hircine" ;
+    :hasID "CHR-011" ; :hasRole "Daedric Prince of the Hunt" ;
+    foaf:name "Hircine" ;
+    :sourceURL "https://en.uesp.net/wiki/Lore:Hircine"^^xsd:anyURI ;
+    :framesAs :CLM_A005 .
+
+:Molag_Bal rdf:type owl:NamedIndividual , :Character ;
+    rdfs:label "Molag Bal" ;
+    :hasID "CHR-012" ; :hasRole "Daedric Prince of Domination" ;
+    foaf:name "Molag Bal" ;
+    :sourceURL "https://en.uesp.net/wiki/Lore:Molag_Bal"^^xsd:anyURI ;
+    :framesAs :CLM_A008 .
+
+#################################################################
+# Claim Individuals
+#################################################################
+
+:CLM_A001 rdf:type owl:NamedIndividual , :Claim ;
+    rdfs:label "Skyrim belongs to the Nords" ;
+    :hasID "CLM-A001" ; :hasClaimType "Territorial Claim" ;
+    :hasClaimTypeIRI :TerritorialClaim ;
+    :hasDescription "Skyrim belongs to the Nords — it is their land by blood, history, and rightful inheritance." ;
+    :hasEvidenceStrength "0.60"^^xsd:decimal ;
+    :hasClaimHolder :Ulfric_Stormcloak ;
+    :hasTarget :Windhelm ;
+    :hasEvidence :Jagged_Crown ; :hasEvidence :Talos_Tradition ;
+    :hasSource :Stormcloaks ;
+    :sourceURL "https://en.uesp.net/wiki/Skyrim:Civil_War"^^xsd:anyURI ;
+    :contradicts :CLM_B001 ;
+    :relatesTo :Windhelm ; :relatesTo :Whiterun ; :relatesTo :Dunmer ; :relatesTo :Khajiit .
+
+:CLM_B001 rdf:type owl:NamedIndividual , :Claim ;
+    rdfs:label "Skyrim is an Imperial province" ;
+    :hasID "CLM-B001" ; :hasClaimType "Sovereignty Claim" ;
+    :hasClaimTypeIRI :SovereigntyClaim ;
+    :hasDescription "Skyrim is a province of the Empire; its stability and protection depend on remaining part of it." ;
+    :hasEvidenceStrength "0.70"^^xsd:decimal ;
+    :hasClaimHolder :General_Tullius ;
+    :hasTarget :Solitude ;
+    :hasEvidence :White_Gold_Concordat ;
+    :hasSource :Imperial_Legion ;
+    :sourceURL "https://en.uesp.net/wiki/Skyrim:Civil_War"^^xsd:anyURI ;
+    :contradicts :CLM_A001 ;
+    :relatesTo :Solitude ; :relatesTo :Whiterun .
+
+:CLM_A002 rdf:type owl:NamedIndividual , :Claim ;
+    rdfs:label "Talos is the 9th Divine" ;
+    :hasID "CLM-A002" ; :hasClaimType "Theological Claim" ;
+    :hasClaimTypeIRI :TheologicalClaim ;
+    :hasDescription "Tiber Septim achieved divinity after death and is rightfully worshipped as Talos, the 9th Divine." ;
+    :hasEvidenceStrength "0.55"^^xsd:decimal ;
+    :hasClaimHolder :Ulfric_Stormcloak ;
+    :hasTarget :Talos_Tradition ; :hasEvidence :Talos_Tradition ;
+    :hasSource :Stormcloaks ;
+    :sourceURL "https://en.uesp.net/wiki/Lore:Talos"^^xsd:anyURI ;
+    :contradicts :CLM_B002 ; :denies :CLM_B002 ;
+    :relatesTo :Nord ; :relatesTo :Solitude .
+
+:CLM_B002 rdf:type owl:NamedIndividual , :Claim ;
+    rdfs:label "Talos was mortal — his worship is heresy" ;
+    :hasID "CLM-B002" ; :hasClaimType "Theological Counter-Claim" ;
+    :hasClaimTypeIRI :TheologicalCounterClaim ;
+    :hasDescription "Talos was a mortal man who never achieved divinity; worshipping him is heresy under the White-Gold Concordat." ;
+    :hasEvidenceStrength "0.65"^^xsd:decimal ;
+    :hasClaimHolder :Elenwen ;
+    :hasTarget :Talos_Tradition ; :hasEvidence :White_Gold_Concordat ;
+    :hasSource :Thalmor ;
+    :sourceURL "https://en.uesp.net/wiki/Lore:White-Gold_Concordat"^^xsd:anyURI ;
+    :contradicts :CLM_A002 ; :denies :CLM_A002 ;
+    :relatesTo :Nord ; :relatesTo :Solitude .
+
+:CLM_A003 rdf:type owl:NamedIndividual , :Claim ;
+    rdfs:label "Ulfric is a genuine freedom fighter" ;
+    :hasID "CLM-A003" ; :hasClaimType "Political Claim" ;
+    :hasClaimTypeIRI :PoliticalClaim ;
+    :hasDescription "Ulfric Stormcloak is a genuine freedom fighter seeking Nord cultural and political independence." ;
+    :hasEvidenceStrength "0.40"^^xsd:decimal ;
+    :hasClaimHolder :Ulfric_Stormcloak ;
+    :hasTarget :Ulfric_Stormcloak ;
+    :hasSource :Stormcloaks ;
+    :sourceURL "https://en.uesp.net/wiki/Skyrim:Ulfric_Stormcloak"^^xsd:anyURI ;
+    :contradicts :CLM_B003 ;
+    :relatesTo :Ulfric_Stormcloak ; :relatesTo :Windhelm .
+
+:CLM_B003 rdf:type owl:NamedIndividual , :Claim ;
+    rdfs:label "Ulfric is an unwitting Thalmor asset" ;
+    :hasID "CLM-B003" ; :hasClaimType "Political Counter-Claim" ;
+    :hasClaimTypeIRI :PoliticalCounterClaim ;
+    :hasDescription "Ulfric is an unwitting Thalmor asset — his rebellion keeps the Empire fractured, serving Aldmeri Dominion interests." ;
+    :hasEvidenceStrength "0.85"^^xsd:decimal ;
+    :hasClaimHolder :Elenwen ;
+    :hasTarget :Ulfric_Stormcloak ; :hasEvidence :Thalmor_Dossier_Ulfric ;
+    :hasSource :Thalmor ;
+    :sourceURL "https://en.uesp.net/wiki/Skyrim:Dossier:_Ulfric_Stormcloak"^^xsd:anyURI ;
+    :contradicts :CLM_A003 ;
+    :relatesTo :Ulfric_Stormcloak ; :relatesTo :Windhelm .
+
+:CLM_A004 rdf:type owl:NamedIndividual , :Claim ;
+    rdfs:label "Paarthurnax must be executed for his crimes" ;
+    :hasID "CLM-A004" ; :hasClaimType "Moral Claim" ;
+    :hasClaimTypeIRI :MoralClaim ;
+    :hasDescription "Paarthurnax committed unforgivable atrocities while serving Alduin and must face justice regardless of his later deeds." ;
+    :hasEvidenceStrength "0.50"^^xsd:decimal ;
+    :hasClaimHolder :Delphine ;
+    :hasTarget :Paarthurnax ;
+    :hasSource :Blades_Faction ;
+    :sourceURL "https://en.uesp.net/wiki/Skyrim:Paarthurnax_(quest)"^^xsd:anyURI ;
+    :contradicts :CLM_B004 ;
+    :relatesTo :Paarthurnax .
+
+:CLM_B004 rdf:type owl:NamedIndividual , :Claim ;
+    rdfs:label "Paarthurnax has earned redemption" ;
+    :hasID "CLM-B004" ; :hasClaimType "Moral Counter-Claim" ;
+    :hasClaimTypeIRI :MoralCounterClaim ;
+    :hasDescription "Paarthurnax has spent millennia atoning for past crimes by guiding humanity; his redemption is real and he deserves to live." ;
+    :hasEvidenceStrength "0.70"^^xsd:decimal ;
+    :hasClaimHolder :Paarthurnax ;
+    :hasTarget :Paarthurnax ;
+    :hasSource :Greybeards_Faction ;
+    :sourceURL "https://en.uesp.net/wiki/Skyrim:Paarthurnax"^^xsd:anyURI ;
+    :contradicts :CLM_A004 ;
+    :relatesTo :Paarthurnax .
+
+:CLM_A005 rdf:type owl:NamedIndividual , :Claim ;
+    rdfs:label "The werewolf form is Hircine's gift" ;
+    :hasID "CLM-A005" ; :hasClaimType "Theological-Moral Claim" ;
+    :hasClaimTypeIRI :TheologicalMoralClaim ;
+    :hasDescription "Lycanthropy is Hircine's gift: it grants power, freedom, and belonging to the Great Hunt." ;
+    :hasEvidenceStrength "0.45"^^xsd:decimal ;
+    :hasClaimHolder :Hircine ;
+    :hasTarget :Werewolf ;
+    :sourceURL "https://en.uesp.net/wiki/Lore:Hircine"^^xsd:anyURI ;
+    :disputes :CLM_B005 ;
+    :relatesTo :Werewolf .
+
+:CLM_B005 rdf:type owl:NamedIndividual , :Claim ;
+    rdfs:label "The werewolf form is a burden and a curse" ;
+    :hasID "CLM-B005" ; :hasClaimType "Moral Counter-Claim" ;
+    :hasClaimTypeIRI :MoralCounterClaim ;
+    :hasDescription "The werewolf curse is a burden: it denies Sovngarde, prevents rest, and traps the soul in Hircine's Hunting Grounds on death." ;
+    :hasEvidenceStrength "0.75"^^xsd:decimal ;
+    :hasClaimHolder :Dragonborn ;
+    :hasTarget :Werewolf ; :hasEvidence :Kodlak_Testament ;
+    :sourceURL "https://en.uesp.net/wiki/Skyrim:Werewolf"^^xsd:anyURI ;
+    :disputes :CLM_A005 ;
+    :relatesTo :Werewolf .
+
+:CLM_A006 rdf:type owl:NamedIndividual , :Claim ;
+    rdfs:label "Alduin is the World-Eater — prophesied end of the age" ;
+    :hasID "CLM-A006" ; :hasClaimType "Cosmological Claim" ;
+    :hasClaimTypeIRI :CosmologicalClaim ;
+    :hasDescription "Alduin's return fulfills the ancient prophecy — he is the World-Eater and the end of the current age." ;
+    :hasEvidenceStrength "0.50"^^xsd:decimal ;
+    :hasClaimHolder :Alduin ;
+    :hasTarget :Alduin ; :hasEvidence :Elder_Scroll ;
+    :sourceURL "https://en.uesp.net/wiki/Skyrim:Alduin"^^xsd:anyURI ;
+    :disputes :CLM_B006 ;
+    :relatesTo :Alduin ; :relatesTo :Elder_Scroll .
+
+:CLM_B006 rdf:type owl:NamedIndividual , :Claim ;
+    rdfs:label "Alduin is a powerful dragon, not a cosmic inevitability" ;
+    :hasID "CLM-B006" ; :hasClaimType "Cosmological Counter-Claim" ;
+    :hasClaimTypeIRI :CosmologicalCounterClaim ;
+    :hasDescription "Alduin is an extraordinarily powerful dragon, but not a cosmic inevitability — he can and must be defeated." ;
+    :hasEvidenceStrength "0.80"^^xsd:decimal ;
+    :hasClaimHolder :Dragonborn ;
+    :hasTarget :Alduin ;
+    :hasEvidence :Dragonrend_Shout ; :hasEvidence :Elder_Scroll ;
+    :sourceURL "https://en.uesp.net/wiki/Skyrim:Dragonrend"^^xsd:anyURI ;
+    :disputes :CLM_A006 ;
+    :relatesTo :Alduin ; :relatesTo :Elder_Scroll .
+
+:CLM_A007 rdf:type owl:NamedIndividual , :Claim ;
+    rdfs:label "The Reach is Reachmen land stolen by Nord conquest" ;
+    :hasID "CLM-A007" ; :hasClaimType "Territorial Claim" ;
+    :hasClaimTypeIRI :TerritorialClaim ;
+    :hasDescription "Markarth and The Reach are the ancestral homeland of the Reachmen; violently seized by Nord conquerors and remain occupied territory." ;
+    :hasEvidenceStrength "0.65"^^xsd:decimal ;
+    :hasClaimHolder :Madanach ;
+    :hasTarget :Markarth ; :hasEvidence :Forsworn_Uprising_History ;
+    :hasSource :Forsworn_Faction ;
+    :sourceURL "https://en.uesp.net/wiki/Skyrim:The_Forsworn_Conspiracy"^^xsd:anyURI ;
+    :contradicts :CLM_B007 ;
+    :relatesTo :Markarth ; :relatesTo :Dwemer .
+
+:CLM_B007 rdf:type owl:NamedIndividual , :Claim ;
+    rdfs:label "The Forsworn are criminals, not freedom fighters" ;
+    :hasID "CLM-B007" ; :hasClaimType "Political Counter-Claim" ;
+    :hasClaimTypeIRI :PoliticalCounterClaim ;
+    :hasDescription "The Reach is legitimate Nord and Imperial territory; the Forsworn are dangerous criminals, not a legitimate resistance movement." ;
+    :hasEvidenceStrength "0.40"^^xsd:decimal ;
+    :hasClaimHolder :General_Tullius ;
+    :hasTarget :Markarth ;
+    :hasSource :Imperial_Legion ;
+    :sourceURL "https://en.uesp.net/wiki/Skyrim:Markarth"^^xsd:anyURI ;
+    :contradicts :CLM_A007 ;
+    :relatesTo :Markarth ; :relatesTo :Dwemer .
+
+:CLM_A008 rdf:type owl:NamedIndividual , :Claim ;
+    rdfs:label "Vampires deserve dominion — eternal night is liberation" ;
+    :hasID "CLM-A008" ; :hasClaimType "Supremacist Claim" ;
+    :hasClaimTypeIRI :SupremacistClaim ;
+    :hasDescription "Vampires are the apex predators of Tamriel; blotting out the sun would free vampire-kind and establish their rightful dominion over mortals." ;
+    :hasEvidenceStrength "0.30"^^xsd:decimal ;
+    :hasClaimHolder :Harkon ;
+    :hasTarget :Vampire ; :hasEvidence :Auriels_Bow ;
+    :hasSource :Volkihar_Clan ;
+    :sourceURL "https://en.uesp.net/wiki/Skyrim:Lord_Harkon"^^xsd:anyURI ;
+    :contradicts :CLM_B008 ;
+    :relatesTo :Vampire .
+
+:CLM_B008 rdf:type owl:NamedIndividual , :Claim ;
+    rdfs:label "Vampirism is a curse — eternal night must be prevented" ;
+    :hasID "CLM-B008" ; :hasClaimType "Moral Counter-Claim" ;
+    :hasClaimTypeIRI :MoralCounterClaim ;
+    :hasDescription "Vampirism is an abomination from Molag Bal's domination; the eternal night plan would destroy all mortal life and must be stopped." ;
+    :hasEvidenceStrength "0.90"^^xsd:decimal ;
+    :hasClaimHolder :Dragonborn ;
+    :hasTarget :Vampire ; :hasEvidence :Auriels_Bow ;
+    :hasSource :Dawnguard_Faction ;
+    :sourceURL "https://en.uesp.net/wiki/Skyrim:Dawnguard_(faction)"^^xsd:anyURI ;
+    :contradicts :CLM_A008 ;
+    :relatesTo :Vampire .
+
+#################################################################
+# Explicit inverse assertions
+#################################################################
+
+:CLM_A001 :isFramedBy :Ulfric_Stormcloak .
+:CLM_B001 :isFramedBy :General_Tullius .
+:CLM_A002 :isFramedBy :Ulfric_Stormcloak .
+:CLM_B002 :isFramedBy :Elenwen .
+:CLM_A003 :isFramedBy :Ulfric_Stormcloak .
+:CLM_B003 :isFramedBy :Elenwen .
+:CLM_A004 :isFramedBy :Delphine .
+:CLM_B004 :isFramedBy :Paarthurnax .
+:CLM_A005 :isFramedBy :Hircine .
+:CLM_B005 :isFramedBy :Dragonborn .
+:CLM_A006 :isFramedBy :Alduin .
+:CLM_B006 :isFramedBy :Dragonborn .
+:CLM_A007 :isFramedBy :Madanach .
+:CLM_B007 :isFramedBy :General_Tullius .
+:CLM_A008 :isFramedBy :Harkon , :Molag_Bal .
+:CLM_B008 :isFramedBy :Dragonborn .
