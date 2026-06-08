@@ -1,6 +1,8 @@
 # Claims of Tamriel : OWL Ontology of Contested Narratives
 
-<img src="./tamriel-logo.png" alt="Claims of Tamriel banner" width="200"/>
+<p align="center">
+  <img src="./tamriel-logo.png" alt="Claims of Tamriel banner" width="200"/>
+</p>
 
 > *An OWL ontology modelling conflicting claims, rival factions, and epistemic conflict in* The Elder Scrolls V: Skyrim  
 > **Course:** Knowledge Representation & Knowledge Extraction (KRKE) — University of Bologna  
