@@ -925,7 +925,7 @@ Talos is the 9th Divine     · Ulfric  · Theological
 }
 <span class="sk">GROUP BY</span> <span class="sv">?factionA</span> <span class="sv">?factionB</span>
 <span class="sk">ORDER BY</span> <span class="sk">DESC</span>(<span class="sv">?conflicts</span>)`,
-   desc:"Infers faction-level conflict by traversing the member → framesAs → contradicts chain. No direct faction-vs-faction property exists — this is entirely emergent from the data.",
+   desc:"Derives faction-level conflicts by aggregating contradictions between claims originating from different factions. Conflict relations are computed from claim sources rather than explicitly asserted between factions.",
    result:`factionA       | factionB        | conflicts
 ───────────────┼─────────────────┼──────────
 Stormcloaks    | Thalmor         | 2
