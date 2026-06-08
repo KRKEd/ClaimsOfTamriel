@@ -27,6 +27,7 @@ nav{position:fixed;top:0;left:0;right:0;z-index:200;background:rgba(7,6,10,.97);
 /* HERO */
 #hero{position:relative;min-height:100vh;overflow:hidden;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:7rem 1.5rem 5rem}
 #starfield{position:absolute;inset:0;z-index:0}
+#hero-map{position:absolute;top:10%;left:50%;width:min(82vw,900px);height:min(65vh,640px);transform:translateX(-50%);z-index:1;pointer-events:none;opacity:.16;filter:grayscale(.15) brightness(.95) blur(1px);background:url('img/cities.jpg') center/cover no-repeat;border:1px solid rgba(240,232,208,.08);border-radius:24px;box-shadow:0 28px 80px rgba(0,0,0,.28);}
 .fog{position:absolute;inset:0;z-index:1;pointer-events:none;overflow:hidden}
 .fo{position:absolute;border-radius:50%;filter:blur(90px);pointer-events:none;animation:drift linear infinite}
 .fo.a{width:680px;height:320px;background:radial-gradient(rgba(160,100,20,.12),transparent);top:5%;left:-12%;animation-duration:22s}
@@ -189,7 +190,7 @@ footer{border-top:1px solid var(--gbd);padding:2.5rem 2rem;text-align:center;bac
 @keyframes fu{from{opacity:0;transform:translateY(18px)}to{opacity:1;transform:translateY(0)}}
 .rev{opacity:0;transform:translateY(22px);transition:opacity .75s ease,transform .75s ease}
 .rev.vis{opacity:1;transform:translateY(0)}
-@media(max-width:720px){.two,.cgrid{grid-template-columns:1fr}.nlinks{display:none}.hstats{flex-wrap:wrap;justify-content:center;gap:1rem}.hd{display:none}.hf{padding:2rem 1.5rem}}
+@media(max-width:720px){.two,.cgrid{grid-template-columns:1fr}.nlinks{display:none}.hstats{flex-wrap:wrap;justify-content:center;gap:1rem}.hd{display:none}.hf{padding:2rem 1.5rem}#hero-map{display:none}}
 </style>
 </head>
 <body style="overflow:hidden;">
@@ -272,6 +273,7 @@ footer{border-top:1px solid var(--gbd);padding:2.5rem 2rem;text-align:center;bac
 <!-- ═══ HERO ══════════════════════════════════════════════ -->
 <div id="hero">
   <canvas id="starfield"></canvas>
+  <div id="hero-map" aria-hidden="true"></div>
   <div class="fog"><div class="fo a"></div><div class="fo b"></div><div class="fo c"></div></div>
   <div class="hi">
     <div class="hf">
