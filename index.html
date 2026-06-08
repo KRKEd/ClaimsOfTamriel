@@ -193,65 +193,62 @@ footer{border-top:1px solid var(--gbd);padding:2.5rem 2rem;text-align:center;bac
 </style>
 </head>
 <body style="overflow:hidden;">
-<!-- ═══════════════════════════════════════
-     INTRO OVERLAY — skyrimvid.mp4
-     Video biter → 1.2s fade → site açılır
-     ═══════════════════════════════════════ -->
 <div id="intro-overlay">
-  <video id="intro-video" autoplay muted playsinline>
-    <source src="/img/skyrimvid.mp4" type="video/mp4">
+  <div id="intro-popup">
+    <h2>CLAIMS OF TAMRIEL</h2>
+    <p>An ontology of contested narratives, rival factions, and epistemic conflict.</p>
+    <button id="discover-btn">CLICK TO DISCOVER SKYRIM</button>
+  </div>
+  <video id="intro-video" playsinline preload="auto">
+    <source src="img/skyrimvid.mp4" type="video/mp4">
+    Your browser does not support the video tag.
   </video>
+  <button id="skip-btn" aria-hidden="true">CLICK TO SKIP</button>
 </div>
 
 <style>
-  @keyframes fadeIn {
-    from {
-      opacity: 0;
-    }
-    to {
-      opacity: 1;
-    }
-  }
-
-  #intro-overlay {
-    position: fixed;
-    inset: 0;
-    background: #000;
-    z-index: 99999;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    opacity: 0;
-    animation: fadeIn 1.5s ease forwards;
-    transition: opacity 1.2s ease;
-  }
-  #intro-overlay.fade-out {
-    opacity: 0;
-    pointer-events: none;
-  }
-  #intro-video {
-    width: 100vw;
-    height: 100vh;
-    object-fit: cover;
-  }
+  @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+  #intro-overlay { position: fixed; inset: 0; background: #000; z-index: 99999; display: flex; align-items: center; justify-content: center; opacity: 0; animation: fadeIn 1.2s ease forwards; transition: opacity 1.2s ease; }
+  #intro-overlay.fade-out { opacity: 0; pointer-events: none; }
+  #intro-video { position: absolute; inset: 0; width: 100vw; height: 100vh; object-fit: cover; z-index: 1; }
+  #intro-popup { position: relative; z-index: 2; max-width: 720px; width: calc(100% - 4rem); margin: 0 auto; padding: 2.25rem 2rem; background: linear-gradient(180deg, rgba(16,12,8,0.92), rgba(24,16,8,0.86)); border: 1px solid rgba(200,160,16,0.12); box-shadow: 0 8px 40px rgba(0,0,0,0.6); text-align: center; color: #f0e8d0; font-family: "Cinzel", serif; border-radius: 8px; }
+  #intro-popup h2 { font-family: "Uncial Antiqua", serif; font-size: 2.4rem; color: #d6b24a; margin-bottom: .6rem; letter-spacing: .08em; }
+  #intro-popup p { color: rgba(240,232,208,0.9); font-size: 1rem; margin-bottom: 1.2rem; }
+  #discover-btn { font-family: "Cinzel", serif; letter-spacing: .18em; padding: .9rem 1.25rem; font-size: .95rem; color: #221a0c; background: linear-gradient(180deg,#f0d020,#d6b24a); border: none; border-radius: 6px; cursor: pointer; }
+  #discover-btn:active { transform: translateY(1px); }
+  #skip-btn { position: absolute; z-index: 3; top: 1.25rem; right: 1.25rem; padding: .5rem .85rem; background: rgba(0,0,0,0.45); color: #f0e8d0; border: 1px solid rgba(240,208,48,0.12); border-radius: 6px; display: none; cursor: pointer; font-family: "Cinzel", serif; letter-spacing: .14em; }
 </style>
 
 <script>
   (function () {
     var overlay = document.getElementById('intro-overlay');
-    var video   = document.getElementById('intro-video');
+    var video = document.getElementById('intro-video');
+    var popup = document.getElementById('intro-popup');
+    var discover = document.getElementById('discover-btn');
+    var skip = document.getElementById('skip-btn');
 
     function finishIntro() {
       overlay.classList.add('fade-out');
-      setTimeout(function () {
-        overlay.remove();
-        document.body.style.overflow = '';
-      }, 1200);
+      setTimeout(function () { overlay.remove(); document.body.style.overflow = ''; }, 1200);
     }
 
+    discover.addEventListener('click', function () {
+      popup.style.display = 'none';
+      try { video.muted = false; video.volume = 1; } catch (e) {}
+      var p = video.play();
+      if (p && p.catch) {
+        p.catch(function (err) {
+          console.warn('Video play failed:', err);
+        });
+      }
+      skip.style.display = 'block';
+      skip.setAttribute('aria-hidden', 'false');
+    });
+
+    skip.addEventListener('click', finishIntro);
     video.addEventListener('ended', finishIntro);
     video.addEventListener('error', function () { setTimeout(finishIntro, 2000); });
-    setTimeout(finishIntro, 30000); // güvenlik
+    setTimeout(finishIntro, 30000);
   })();
 </script>
 
