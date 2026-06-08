@@ -916,9 +916,8 @@ Talos is the 9th Divine     · Ulfric  · Theological
 <span class="sk">SELECT</span> <span class="sv">?factionA</span> <span class="sv">?factionB</span>
        (<span class="sk">COUNT</span>(<span class="sk">DISTINCT</span> <span class="sv">?claimA</span>) <span class="sk">AS</span> <span class="sv">?conflicts</span>)
 <span class="sk">WHERE</span> {
-  <span class="sv">?charA</span> <span class="sp">:memberOf</span> <span class="sv">?facA</span> ; <span class="sp">:framesAs</span> <span class="sv">?claimA</span> .
-  <span class="sv">?charB</span> <span class="sp">:memberOf</span> <span class="sv">?facB</span> ; <span class="sp">:framesAs</span> <span class="sv">?claimB</span> .
-  <span class="sv">?claimA</span> <span class="sp">:contradicts</span> <span class="sv">?claimB</span> .
+  <span class="sv">?claimA</span> <span class="sp">:hasSource</span> <span class="sv">?facA</span> ; <span class="sp">:contradicts</span> <span class="sv">?claimB</span> .
+  <span class="sv">?claimB</span> <span class="sp">:hasSource</span> <span class="sv">?facB</span> .
   <span class="sv">?facA</span> <span class="sp">rdfs:label</span> <span class="sv">?factionA</span> .
   <span class="sv">?facB</span> <span class="sp">rdfs:label</span> <span class="sv">?factionB</span> .
   <span class="sk">FILTER</span> (<span class="sv">?facA</span> != <span class="sv">?facB</span> &amp;&amp;
@@ -929,10 +928,10 @@ Talos is the 9th Divine     · Ulfric  · Theological
    desc:"Infers faction-level conflict by traversing the member → framesAs → contradicts chain. No direct faction-vs-faction property exists — this is entirely emergent from the data.",
    result:`factionA       | factionB        | conflicts
 ───────────────┼─────────────────┼──────────
-Stormcloaks    | Thalmor         | 3
+Stormcloaks    | Thalmor         | 2
 Imperial Legion| Stormcloaks     | 1
 Blades         | Greybeards      | 1
-Dawnguard      | Volkihar Clan   | 1`},
+Forsworn      | Imperial Legion   | 1`},
   {title:"CQ3 — Contested Evidence",
    code:`<span class="sc"># Evidence cited by directly opposing claims</span>
 <span class="sk">SELECT</span> <span class="sv">?evLabel</span>
@@ -952,8 +951,7 @@ Dawnguard      | Volkihar Clan   | 1`},
    desc:"Finds artifacts cited by opposing claims simultaneously. The same object grounds two contradictory assertions — contested evidence rather than contested facts.",
    result:`evLabel       | citedBy | claims
 ──────────────┼─────────┼────────────────────────────
-Auriel's Bow  | 2       | CLM-A008 | CLM-B008
-Elder Scroll  | 2       | CLM-A006 | CLM-B006`},
+Auriel's Bow  | 2       | CLM-A008 | CLM-B008`},
   {title:"CQ4 — Neutrality",
    code:`<span class="sc"># Characters with no framesAs — neutrality detection</span>
 <span class="sk">SELECT</span> <span class="sv">?charLabel</span> <span class="sv">?role</span>
