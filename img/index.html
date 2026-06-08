@@ -192,70 +192,7 @@ footer{border-top:1px solid var(--gbd);padding:2.5rem 2rem;text-align:center;bac
 @media(max-width:720px){.two,.cgrid{grid-template-columns:1fr}.nlinks{display:none}.hstats{flex-wrap:wrap;justify-content:center;gap:1rem}.hd{display:none}.hf{padding:2rem 1.5rem}}
 </style>
 </head>
-<body style="overflow:hidden;">
-<!-- ═══════════════════════════════════════
-     INTRO OVERLAY — skyrimvid.mp4
-     Video biter → 1.2s fade → site açılır
-     ═══════════════════════════════════════ -->
-<div id="intro-overlay">
-  <video id="intro-video" autoplay muted playsinline>
-    <source src="/img/skyrimvid.mp4" type="video/mp4">
-  </video>
-</div>
-
-<style>
-  @keyframes fadeIn {
-    from {
-      opacity: 0;
-    }
-    to {
-      opacity: 1;
-    }
-  }
-
-  #intro-overlay {
-    position: fixed;
-    inset: 0;
-    background: #000;
-    z-index: 99999;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    opacity: 0;
-    animation: fadeIn 1.5s ease forwards;
-    transition: opacity 1.2s ease;
-  }
-  #intro-overlay.fade-out {
-    opacity: 0;
-    pointer-events: none;
-  }
-  #intro-video {
-    width: 100vw;
-    height: 100vh;
-    object-fit: cover;
-  }
-</style>
-
-<script>
-  (function () {
-    var overlay = document.getElementById('intro-overlay');
-    var video   = document.getElementById('intro-video');
-
-    function finishIntro() {
-      overlay.classList.add('fade-out');
-      setTimeout(function () {
-        overlay.remove();
-        document.body.style.overflow = '';
-      }, 1200);
-    }
-
-    video.addEventListener('ended', finishIntro);
-    video.addEventListener('error', function () { setTimeout(finishIntro, 2000); });
-    setTimeout(finishIntro, 30000); // güvenlik
-  })();
-</script>
-
-
+<body>
 
 <div id="disc">&#9670; &nbsp; DISCOVERED</div>
 
