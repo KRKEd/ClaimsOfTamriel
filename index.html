@@ -28,6 +28,7 @@ nav{position:fixed;top:0;left:0;right:0;z-index:200;background:rgba(7,6,10,.97);
 #hero{position:relative;min-height:100vh;overflow:hidden;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:7rem 1.5rem 5rem}
 #starfield{position:absolute;inset:0;z-index:0}
 #hero-map{position:absolute;top:10%;left:50%;width:min(82vw,900px);height:min(65vh,640px);transform:translateX(-50%);z-index:1;pointer-events:none;opacity:.16;filter:grayscale(.15) brightness(.95) blur(1px);background:url('img/cities.jpg') center/cover no-repeat;border:1px solid rgba(240,232,208,.08);border-radius:24px;box-shadow:0 28px 80px rgba(0,0,0,.28);}
+#uses-image{position:absolute;top:2rem;right:2rem;width:min(360px,28vw);height:min(320px,28vw);background:url('img/war.png') center/cover no-repeat;opacity:.18;filter:grayscale(.25) brightness(.9) blur(.7px);border-radius:20px;box-shadow:0 28px 60px rgba(0,0,0,.22);pointer-events:none;z-index:0;}
 .fog{position:absolute;inset:0;z-index:1;pointer-events:none;overflow:hidden}
 .fo{position:absolute;border-radius:50%;filter:blur(90px);pointer-events:none;animation:drift linear infinite}
 .fo.a{width:680px;height:320px;background:radial-gradient(rgba(160,100,20,.12),transparent);top:5%;left:-12%;animation-duration:22s}
@@ -190,7 +191,7 @@ footer{border-top:1px solid var(--gbd);padding:2.5rem 2rem;text-align:center;bac
 @keyframes fu{from{opacity:0;transform:translateY(18px)}to{opacity:1;transform:translateY(0)}}
 .rev{opacity:0;transform:translateY(22px);transition:opacity .75s ease,transform .75s ease}
 .rev.vis{opacity:1;transform:translateY(0)}
-@media(max-width:720px){.two,.cgrid{grid-template-columns:1fr}.nlinks{display:none}.hstats{flex-wrap:wrap;justify-content:center;gap:1rem}.hd{display:none}.hf{padding:2rem 1.5rem}#hero-map{display:none}}
+@media(max-width:720px){.two,.cgrid{grid-template-columns:1fr}.nlinks{display:none}.hstats{flex-wrap:wrap;justify-content:center;gap:1rem}.hd{display:none}.hf{padding:2rem 1.5rem}#hero-map,#uses-image{display:none}}
 </style>
 </head>
 <body style="overflow:hidden;">
@@ -352,6 +353,53 @@ footer{border-top:1px solid var(--gbd);padding:2.5rem 2rem;text-align:center;bac
     <div class="stcard"><span class="stn">4</span><span class="stl">Alignments</span></div>
     <div class="stcard"><span class="stn">1</span><span class="stl">Chain Axiom</span></div>
     <div class="stcard"><span class="stn">11</span><span class="stl">SKOS Links</span></div>
+  </div>
+</section>
+
+<section id="uses">
+  <div id="uses-image" aria-hidden="true"></div>
+  <div class="rev">
+    <p class="chapter">USE CASES</p>
+    <h2>Real Case Uses for This Project</h2>
+    <div class="rule"></div>
+  </div>
+  <div class="two rev" style="transition-delay:.1s">
+    <div>
+      <p>This project is not just a stylized game ontology; it is a proof-of-concept for structurally representing disagreement, evidence, and claim provenance in domains where truth is contested.</p>
+      <p>Here are four grounded applications that show how a claim-centered ontology can turn conflict into machine-readable, objective structure.</p>
+    </div>
+    <div>
+      <ul class="nlist">
+        <li>
+          <span class="nnum">1</span>
+          <div class="nbdy">
+            <h4>Objective conflict resolution in real-world ontologies</h4>
+            <p>This approach enables ontologies to capture real-world disputes without choosing sides, letting both factual and artificial information emerge from structured comparison of competing claims.</p>
+          </div>
+        </li>
+        <li>
+          <span class="nnum">2</span>
+          <div class="nbdy">
+            <h4>Analyzing fictional worlds across sociology and beyond</h4>
+            <p>Fictional universes become test beds for sociological, cultural, and epistemic modelling, where conflicting narratives can be represented, compared, and studied with the same machinery used for real disputes.</p>
+          </div>
+        </li>
+        <li>
+          <span class="nnum">3</span>
+          <div class="nbdy">
+            <h4>Journalistic Fact-Check Frameworks</h4>
+            <p>A machine-readable model for comparing contradictory news sources claim by claim, showing which assertion depends on which evidence and making contested reporting structurally transparent.</p>
+          </div>
+        </li>
+        <li>
+          <span class="nnum">4</span>
+          <div class="nbdy">
+            <h4>Legal &amp; Testimonial Evidence Mapping</h4>
+            <p>In court-like workflows, this ontology can represent contradictory witness statements, who claimed what, and on what evidence those claims rest — preserving the structure of legal dispute.</p>
+          </div>
+        </li>
+      </ul>
+    </div>
   </div>
 </section>
 
